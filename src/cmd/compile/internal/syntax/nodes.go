@@ -98,6 +98,15 @@ type (
 		decl
 	}
 
+	TryDecl struct {
+		Group  *Group // nil means not part of a group
+		Pragma Pragma
+		Name   *Name
+		Type   Expr // nil means no type
+		Value  Expr // nil means no value
+		decl
+	}
+
 	// func          Name Type { Body }
 	// func          Name Type
 	// func Receiver Name Type { Body }

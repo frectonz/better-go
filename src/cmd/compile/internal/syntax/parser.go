@@ -765,6 +765,27 @@ func (p *parser) varDecl(group *Group) Decl {
 	return d
 }
 
+func (p *parser) tryDecl(group *Group) Decl {
+	if trace {
+		defer p.trace("tryDecl")()
+	}
+
+	d := new(TryDecl)
+	d.pos = p.pos()
+	d.Group = group
+	d.Pragma = p.takePragma()
+
+	d.Name = p.name()
+	p.want(_Or)
+	d.Type = p.type_()
+	p.want(_Assign)
+	d.Value = p.expr()
+
+	panic(d)
+
+	return nil
+}
+
 // FunctionDecl = "func" FunctionName [ TypeParams ] ( Function | Signature ) .
 // FunctionName = identifier .
 // Function     = Signature FunctionBody .
@@ -2567,6 +2588,9 @@ func (p *parser) stmtOrNil() Stmt {
 	switch p.tok {
 	case _Var:
 		return p.declStmt(p.varDecl)
+
+	case _Try:
+		return p.declStmt(p.tryDecl)
 
 	case _Const:
 		return p.declStmt(p.constDecl)
