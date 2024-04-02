@@ -38,8 +38,8 @@ func (u uint128) xor(m uint128) uint128 {
 	return uint128{u.hi ^ m.hi, u.lo ^ m.lo}
 }
 
-// or returns the bitwise OR of u and m (u|m).
-func (u uint128) or(m uint128) uint128 {
+// or_ returns the bitwise OR of u and m (u|m).
+func (u uint128) or_(m uint128) uint128 {
 	return uint128{u.hi | m.hi, u.lo | m.lo}
 }
 
@@ -71,7 +71,7 @@ func (u *uint128) halves() [2]*uint64 {
 // bitsSetFrom returns a copy of u with the given bit
 // and all subsequent ones set.
 func (u uint128) bitsSetFrom(bit uint8) uint128 {
-	return u.or(mask6(int(bit)).not())
+	return u.or_(mask6(int(bit)).not())
 }
 
 // bitsClearedFrom returns a copy of u with the given bit

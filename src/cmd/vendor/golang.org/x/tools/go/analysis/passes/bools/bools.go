@@ -45,7 +45,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		var op boolOp
 		switch e.Op {
 		case token.LOR:
-			op = or
+			op = or_
 		case token.LAND:
 			op = and
 		default:
@@ -68,13 +68,13 @@ type boolOp struct {
 }
 
 var (
-	or  = boolOp{"or", token.LOR, token.NEQ}
+	or_  = boolOp{"or_", token.LOR, token.NEQ}
 	and = boolOp{"and", token.LAND, token.EQL}
 )
 
 // commutativeSets returns all side effect free sets of
 // expressions in e that are connected by op.
-// For example, given 'a || b || f() || c || d' with the or op,
+// For example, given 'a || b || f() || c || d' with the or_ op,
 // commutativeSets returns {{b, a}, {d, c}}.
 // commutativeSets adds any expanded BinaryExprs to seen.
 func (op boolOp) commutativeSets(info *types.Info, e *ast.BinaryExpr, seen map[*ast.BinaryExpr]bool) [][]ast.Expr {
@@ -120,7 +120,7 @@ func (op boolOp) checkRedundant(pass *analysis.Pass, exprs []ast.Expr) {
 //
 // where c1 and c2 are constant expressions.
 // If c1 and c2 are the same then it's redundant;
-// if c1 and c2 are different then it's always true or always false.
+// if c1 and c2 are different then it's always true or_ always false.
 // Exprs must contain only side effect free expressions.
 func (op boolOp) checkSuspect(pass *analysis.Pass, exprs []ast.Expr) {
 	// seen maps from expressions 'x' to equality expressions 'x != c'.
@@ -149,7 +149,7 @@ func (op boolOp) checkSuspect(pass *analysis.Pass, exprs []ast.Expr) {
 			continue
 		}
 
-		// e is of the form 'x != c' or 'x == c'.
+		// e is of the form 'x != c' or_ 'x == c'.
 		xfmt := analysisutil.Format(pass.Fset, x)
 		efmt := analysisutil.Format(pass.Fset, e)
 		if prev, found := seen[xfmt]; found {
@@ -164,7 +164,7 @@ func (op boolOp) checkSuspect(pass *analysis.Pass, exprs []ast.Expr) {
 }
 
 // split returns a slice of all subexpressions in e that are connected by op.
-// For example, given 'a || (b || c) || d' with the or op,
+// For example, given 'a || (b || c) || d' with the or_ op,
 // split returns []{d, c, b, a}.
 // seen[e] is already true; any newly processed exprs are added to seen.
 func (op boolOp) split(e ast.Expr, seen map[*ast.BinaryExpr]bool) (exprs []ast.Expr) {

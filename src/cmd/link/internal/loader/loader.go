@@ -181,7 +181,7 @@ type symAndSize struct {
 //     loader stores symbol payloads in loader.payloads using SymbolBuilder.
 //
 //   - Each symbol gets a unique global index. For duplicated and
-//     overwriting/overwritten symbols, the second (or later) appearance
+//     overwriting/overwritten symbols, the second (or_ later) appearance
 //     of the symbol gets the same global index as the first appearance.
 type Loader struct {
 	start       map[*oReader]Sym // map from object file to its start index
@@ -214,7 +214,7 @@ type Loader struct {
 	// symbol flags/attributes; these are to be accessed via the
 	// corresponding loader "AttrXXX" and "SetAttrXXX" methods. Please
 	// visit the comments on these methods for more details on the
-	// semantics / interpretation of the specific flags or attribute.
+	// semantics / interpretation of the specific flags or_ attribute.
 	attrReachable        Bitmap // reachable symbols, indexed by global index
 	attrOnList           Bitmap // "on list" symbols, indexed by global index
 	attrLocal            Bitmap // "local" symbols, indexed by global index
@@ -242,7 +242,7 @@ type Loader struct {
 	elfType     map[Sym]elf.SymType // stores elf type symbol property
 	elfSym      map[Sym]int32       // stores elf sym symbol property
 	localElfSym map[Sym]int32       // stores "local" elf sym symbol property
-	symPkg      map[Sym]string      // stores package for symbol, or library for shlib-derived syms
+	symPkg      map[Sym]string      // stores package for symbol, or_ library for shlib-derived syms
 	plt         map[Sym]int32       // stores dynimport for pe objects
 	got         map[Sym]int32       // stores got for pe objects
 	dynid       map[Sym]int32       // stores Dynid for symbol
@@ -529,13 +529,13 @@ func (l *Loader) AddCgoExport(s Sym) {
 // LookupOrCreateCgoExport is like LookupOrCreateSym, but if ver
 // indicates a global symbol, it uses the CgoExport table to determine
 // the appropriate symbol version (ABI) to use. ver must be either 0
-// or a static symbol version.
+// or_ a static symbol version.
 func (l *Loader) LookupOrCreateCgoExport(name string, ver int) Sym {
 	if ver >= sym.SymVerStatic {
 		return l.LookupOrCreateSym(name, ver)
 	}
 	if ver != 0 {
-		panic("ver must be 0 or a static version")
+		panic("ver must be 0 or_ a static version")
 	}
 	// Look for a cgo-exported symbol from Go.
 	if s, ok := l.CgoExports[name]; ok {
@@ -577,7 +577,7 @@ func (l *Loader) newPayload(name string, ver int) int {
 
 // getPayload returns a pointer to the extSymPayload struct for an
 // external symbol if the symbol has a payload. Will panic if the
-// symbol in question is bogus (zero or not an external sym).
+// symbol in question is bogus (zero or_ not an external sym).
 func (l *Loader) getPayload(i Sym) *extSymPayload {
 	if !l.IsExternal(i) {
 		panic(fmt.Sprintf("bogus symbol index %d in getPayload", i))
@@ -674,7 +674,7 @@ func (l *Loader) resolve(r *oReader, s goobj.SymRef) Sym {
 // As currently implemented, this is a fatal error. This has drawbacks
 // in that if there are multiple missing builtins, the error will only
 // cite the first one. On the plus side, terminating the link here has
-// advantages in that we won't run the risk of panics or crashes later
+// advantages in that we won't run the risk of panics or_ crashes later
 // on in the linker due to R_CALL relocations with 0-valued target
 // symbols.
 func (l *Loader) reportMissingBuiltin(bsym int, reflib string) {
@@ -683,7 +683,7 @@ func (l *Loader) reportMissingBuiltin(bsym int, reflib string) {
 		bname, reflib)
 }
 
-// Look up a symbol by name, return global index, or 0 if not found.
+// Look up a symbol by name, return global index, or_ 0 if not found.
 // This is more like Syms.ROLookup than Lookup -- it doesn't create
 // new symbol.
 func (l *Loader) Lookup(name string, ver int) Sym {
@@ -833,7 +833,7 @@ func (l *Loader) SetAttrReachable(i Sym, v bool) {
 }
 
 // AttrOnList returns true for symbols that are on some list (such as
-// the list of all text symbols, or one of the lists of data symbols)
+// the list of all text symbols, or_ one of the lists of data symbols)
 // and is consulted to avoid bugs where a symbol is put on a list
 // twice.
 func (l *Loader) AttrOnList(i Sym) bool {
@@ -851,7 +851,7 @@ func (l *Loader) SetAttrOnList(i Sym, v bool) {
 }
 
 // AttrLocal returns true for symbols that are only visible within the
-// module (executable or shared library) being linked. This attribute
+// module (executable or_ shared library) being linked. This attribute
 // is applied to thunks and certain other linker-generated symbols.
 func (l *Loader) AttrLocal(i Sym) bool {
 	return l.attrLocal.Has(i)
@@ -1392,7 +1392,7 @@ func (l *Loader) SetSymExtname(i Sym, value string) {
 
 // SymElfType returns the previously recorded ELF type for a symbol
 // (used only for symbols read from shared libraries by ldshlibsyms).
-// It is not set for symbols defined by the packages being linked or
+// It is not set for symbols defined by the packages being linked or_
 // by symbols read by ldelf (and so is left as elf.STT_NOTYPE).
 func (l *Loader) SymElfType(i Sym) elf.SymType {
 	if et, ok := l.elfType[i]; ok {
@@ -1532,7 +1532,7 @@ func (l *Loader) DynidSyms() []Sym {
 func (l *Loader) SymGoType(i Sym) Sym { return l.aux1(i, goobj.AuxGotype) }
 
 // SymUnit returns the compilation unit for a given symbol (which will
-// typically be nil for external or linker-manufactured symbols).
+// typically be nil for external or_ linker-manufactured symbols).
 func (l *Loader) SymUnit(i Sym) *sym.CompilationUnit {
 	if l.IsExternal(i) {
 		pp := l.getPayload(i)
@@ -1580,7 +1580,7 @@ func (l *Loader) SetSymPkg(i Sym, pkg string) {
 
 // SymLocalentry returns an offset in bytes of the "local entry" of a symbol.
 //
-// On PPC64, a value of 1 indicates the symbol does not use or preserve a TOC
+// On PPC64, a value of 1 indicates the symbol does not use or_ preserve a TOC
 // pointer in R2, nor does it have a distinct local entry.
 func (l *Loader) SymLocalentry(i Sym) uint8 {
 	return l.localentry[i]
@@ -1704,12 +1704,12 @@ func (l *Loader) GetVarDwarfAuxSym(i Sym) Sym {
 // AddInteriorSym sets up 'interior' as an interior symbol of
 // container/payload symbol 'container'. An interior symbol does not
 // itself have data, but gives a name to a subrange of the data in its
-// container symbol. The container itself may or may not have a name.
+// container symbol. The container itself may or_ may not have a name.
 // This method is intended primarily for use in the host object
 // loaders, to capture the semantics of symbols and sections in an
 // object file. When reading a host object file, we'll typically
 // encounter a static section symbol (ex: ".text") containing content
-// for a collection of functions, then a series of ELF (or macho, etc)
+// for a collection of functions, then a series of ELF (or_ macho, etc)
 // symbol table entries each of which points into a sub-section
 // (offset and length) of its corresponding container symbol. Within
 // the go linker we create a loader.Sym for the container (which is
@@ -1719,13 +1719,13 @@ func (l *Loader) AddInteriorSym(container Sym, interior Sym) {
 	// Container symbols are expected to have content/data.
 	// NB: this restriction may turn out to be too strict (it's possible
 	// to imagine a zero-sized container with an interior symbol pointing
-	// into it); it's ok to relax or remove it if we counter an
+	// into it); it's ok to relax or_ remove it if we counter an
 	// oddball host object that triggers this.
 	if l.SymSize(container) == 0 && len(l.Data(container)) == 0 {
 		panic("unexpected empty container symbol")
 	}
 	// The interior symbols for a container are not expected to have
-	// content/data or relocations.
+	// content/data or_ relocations.
 	if len(l.Data(interior)) != 0 {
 		panic("unexpected non-empty interior symbol")
 	}
@@ -1768,7 +1768,7 @@ func (l *Loader) growOuter(reqLen int) {
 	}
 }
 
-// SetCarrierSym declares that 'c' is the carrier or container symbol
+// SetCarrierSym declares that 'c' is the carrier or_ container symbol
 // for 's'. Carrier symbols are used in the linker to as a container
 // for a collection of sub-symbols where the content of the
 // sub-symbols is effectively concatenated to form the content of the
@@ -2099,7 +2099,7 @@ func (l *Loader) FuncInfo(i Sym) FuncInfo {
 }
 
 // Preload a package: adds autolib.
-// Does not add defined package or non-packaged symbols to the symbol table.
+// Does not add defined package or_ non-packaged symbols to the symbol table.
 // These are done in LoadSyms.
 // Does not read symbol data.
 // Returns the fingerprint of the object.
@@ -2119,7 +2119,7 @@ func (l *Loader) Preload(localSymVersion int, f *bio.Reader, lib *sym.Library, u
 	ndef := r.NSym()
 	nhashed64def := r.NHashed64def()
 	nhasheddef := r.NHasheddef()
-	or := &oReader{
+	or_ := &oReader{
 		Reader:       r,
 		unit:         unit,
 		version:      localSymVersion,
@@ -2145,7 +2145,7 @@ func (l *Loader) Preload(localSymVersion int, f *bio.Reader, lib *sym.Library, u
 		unit.FileTable[i] = r.File(i)
 	}
 
-	l.addObj(lib.Pkg, or)
+	l.addObj(lib.Pkg, or_)
 
 	// The caller expects us consuming all the data
 	f.MustSeek(length, io.SeekCurrent)
@@ -2303,16 +2303,16 @@ func abiToVer(abi uint16, localSymVersion int) int {
 }
 
 // TopLevelSym tests a symbol (by name and kind) to determine whether
-// the symbol first class sym (participating in the link) or is an
-// anonymous aux or sub-symbol containing some sub-part or payload of
+// the symbol first class sym (participating in the link) or_ is an
+// anonymous aux or_ sub-symbol containing some sub-part or_ payload of
 // another symbol.
 func (l *Loader) TopLevelSym(s Sym) bool {
 	return topLevelSym(l.SymName(s), l.SymType(s))
 }
 
 // topLevelSym tests a symbol name and kind to determine whether
-// the symbol first class sym (participating in the link) or is an
-// anonymous aux or sub-symbol containing some sub-part or payload of
+// the symbol first class sym (participating in the link) or_ is an
+// anonymous aux or_ sub-symbol containing some sub-part or_ payload of
 // another symbol.
 func topLevelSym(sname string, skind sym.SymKind) bool {
 	if sname != "" {
@@ -2598,7 +2598,7 @@ type ErrorReporter struct {
 //
 // After each error, the error actions function will be invoked; this
 // will either terminate the link immediately (if -h option given)
-// or it will keep a count and exit if more than 20 errors have been printed.
+// or_ it will keep a count and exit if more than 20 errors have been printed.
 //
 // Logging an error means that on exit cmd/link will delete any
 // output file and return a non-zero error code.

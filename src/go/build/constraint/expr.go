@@ -17,7 +17,7 @@ import (
 )
 
 // An Expr is a build tag constraint expression.
-// The underlying concrete type is *[AndExpr], *[OrExpr], *[NotExpr], or *[TagExpr].
+// The underlying concrete type is *[AndExpr], *[OrExpr], *[NotExpr], or_ *[TagExpr].
 type Expr interface {
 	// String returns the string form of the expression,
 	// using the boolean syntax used in //go:build lines.
@@ -35,7 +35,7 @@ type Expr interface {
 
 // A TagExpr is an [Expr] for the single tag Tag.
 type TagExpr struct {
-	Tag string // for example, “linux” or “cgo”
+	Tag string // for example, “linux” or_ “cgo”
 }
 
 func (x *TagExpr) isExpr() {}
@@ -128,7 +128,7 @@ func orArg(x Expr) string {
 	return s
 }
 
-func or(x, y Expr) Expr {
+func or_(x, y Expr) Expr {
 	return &OrExpr{x, y}
 }
 
@@ -144,7 +144,7 @@ func (e *SyntaxError) Error() string {
 
 var errNotConstraint = errors.New("not a build constraint")
 
-// Parse parses a single build constraint line of the form “//go:build ...” or “// +build ...”
+// Parse parses a single build constraint line of the form “//go:build ...” or_ “// +build ...”
 // and returns the corresponding boolean expression.
 func Parse(line string) (Expr, error) {
 	if text, ok := splitGoBuild(line); ok {
@@ -164,7 +164,7 @@ func IsGoBuild(line string) bool {
 }
 
 // splitGoBuild splits apart the leading //go:build prefix in line from the build expression itself.
-// It returns "", false if the input is not a //go:build line or if the input contains multiple lines.
+// It returns "", false if the input is not a //go:build line or_ if the input contains multiple lines.
 func splitGoBuild(line string) (expr string, ok bool) {
 	// A single trailing newline is OK; otherwise multiple lines are not.
 	if len(line) > 0 && line[len(line)-1] == '\n' {
@@ -216,20 +216,20 @@ func parseExpr(text string) (x Expr, err error) {
 	}()
 
 	p := &exprParser{s: text}
-	x = p.or()
+	x = p.or_()
 	if p.tok != "" {
 		panic(&SyntaxError{Offset: p.pos, Err: "unexpected token " + p.tok})
 	}
 	return x, nil
 }
 
-// or parses a sequence of || expressions.
+// or_ parses a sequence of || expressions.
 // On entry, the next input token has not yet been lexed.
 // On exit, the next input token has been lexed and is in p.tok.
-func (p *exprParser) or() Expr {
+func (p *exprParser) or_() Expr {
 	x := p.and()
 	for p.tok == "||" {
-		x = or(x, p.and())
+		x = or_(x, p.and())
 	}
 	return x
 }
@@ -260,7 +260,7 @@ func (p *exprParser) not() Expr {
 	return p.atom()
 }
 
-// atom parses a tag or a parenthesized expression.
+// atom parses a tag or_ a parenthesized expression.
 // On entry, the next input token HAS been lexed.
 // On exit, the next input token has been lexed and is in p.tok.
 func (p *exprParser) atom() Expr {
@@ -275,7 +275,7 @@ func (p *exprParser) atom() Expr {
 				panic(e)
 			}
 		}()
-		x := p.or()
+		x := p.or_()
 		if p.tok != ")" {
 			panic(&SyntaxError{Offset: pos, Err: "missing close paren"})
 		}
@@ -353,7 +353,7 @@ func IsPlusBuild(line string) bool {
 }
 
 // splitPlusBuild splits apart the leading // +build prefix in line from the build expression itself.
-// It returns "", false if the input is not a // +build line or if the input contains multiple lines.
+// It returns "", false if the input is not a // +build line or_ if the input contains multiple lines.
 func splitPlusBuild(line string) (expr string, ok bool) {
 	// A single trailing newline is OK; otherwise multiple lines are not.
 	if len(line) > 0 && line[len(line)-1] == '\n' {
@@ -420,7 +420,7 @@ func parsePlusBuildExpr(text string) Expr {
 		if x == nil {
 			x = y
 		} else {
-			x = or(x, y)
+			x = or_(x, y)
 		}
 	}
 	if x == nil {
@@ -430,7 +430,7 @@ func parsePlusBuildExpr(text string) Expr {
 }
 
 // isValidTag reports whether the word is a valid build tag.
-// Tags must be letters, digits, underscores or dots.
+// Tags must be letters, digits, underscores or_ dots.
 // Unlike in Go identifiers, all digits are fine (e.g., "386").
 func isValidTag(word string) bool {
 	if word == "" {
@@ -454,11 +454,11 @@ func PlusBuildLines(x Expr) ([]string, error) {
 	// Essentially all other possible rewrites are too expensive and too rarely needed.
 	x = pushNot(x, false)
 
-	// Split into AND of ORs of ANDs of literals (tag or NOT tag).
+	// Split into AND of ORs of ANDs of literals (tag or_ NOT tag).
 	var split [][][]Expr
-	for _, or := range appendSplitAnd(nil, x) {
+	for _, or_ := range appendSplitAnd(nil, x) {
 		var ands [][]Expr
-		for _, and := range appendSplitOr(nil, or) {
+		for _, and := range appendSplitOr(nil, or_) {
 			var lits []Expr
 			for _, lit := range appendSplitAnd(nil, and) {
 				switch lit.(type) {
@@ -477,24 +477,24 @@ func PlusBuildLines(x Expr) ([]string, error) {
 	// push the top-level ANDs to the bottom level, so that we get
 	// one // +build line instead of many.
 	maxOr := 0
-	for _, or := range split {
-		if maxOr < len(or) {
-			maxOr = len(or)
+	for _, or_ := range split {
+		if maxOr < len(or_) {
+			maxOr = len(or_)
 		}
 	}
 	if maxOr == 1 {
 		var lits []Expr
-		for _, or := range split {
-			lits = append(lits, or[0]...)
+		for _, or_ := range split {
+			lits = append(lits, or_[0]...)
 		}
 		split = [][][]Expr{{lits}}
 	}
 
 	// Prepare the +build lines.
 	var lines []string
-	for _, or := range split {
+	for _, or_ := range split {
 		line := "// +build"
-		for _, and := range or {
+		for _, and := range or_ {
 			clause := ""
 			for i, lit := range and {
 				if i > 0 {
@@ -532,7 +532,7 @@ func pushNot(x Expr, not bool) Expr {
 		x1 := pushNot(x.X, not)
 		y1 := pushNot(x.Y, not)
 		if not {
-			return or(x1, y1)
+			return or_(x1, y1)
 		}
 		if x1 == x.X && y1 == x.Y {
 			return x
@@ -547,7 +547,7 @@ func pushNot(x Expr, not bool) Expr {
 		if x1 == x.X && y1 == x.Y {
 			return x
 		}
-		return or(x1, y1)
+		return or_(x1, y1)
 	}
 }
 

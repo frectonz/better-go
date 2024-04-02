@@ -12,7 +12,7 @@ func isMinimizable(t reflect.Type) bool {
 	return t == reflect.TypeOf("") || t == reflect.TypeOf([]byte(nil))
 }
 
-func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
+func minimizeBytes(v []byte, attempt func([]byte) bool, shouldStop func() bool) {
 	tmp := make([]byte, len(v))
 	// If minimization was successful at any point during minimizeBytes,
 	// then the vals slice in (*workerServer).minimizeInput will point to
@@ -21,14 +21,14 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 	// this function.
 	defer copy(tmp, v)
 
-	// First, try to cut the tail.
+	// First, attempt to cut the tail.
 	for n := 1024; n != 0; n /= 2 {
 		for len(v) > n {
 			if shouldStop() {
 				return
 			}
 			candidate := v[:len(v)-n]
-			if !try(candidate) {
+			if !attempt(candidate) {
 				break
 			}
 			// Set v to the new value to continue iterating.
@@ -36,7 +36,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 		}
 	}
 
-	// Then, try to remove each individual byte.
+	// Then, attempt to remove each individual byte.
 	for i := 0; i < len(v)-1; i++ {
 		if shouldStop() {
 			return
@@ -44,7 +44,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 		candidate := tmp[:len(v)-1]
 		copy(candidate[:i], v[:i])
 		copy(candidate[i:], v[i+1:])
-		if !try(candidate) {
+		if !attempt(candidate) {
 			continue
 		}
 		// Update v to delete the value at index i.
@@ -55,7 +55,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 		i--
 	}
 
-	// Then, try to remove each possible subset of bytes.
+	// Then, attempt to remove each possible subset of bytes.
 	for i := 0; i < len(v)-1; i++ {
 		copy(tmp, v[:i])
 		for j := len(v); j > i+1; j-- {
@@ -64,7 +64,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 			}
 			candidate := tmp[:len(v)-j+i]
 			copy(candidate[i:], v[j:])
-			if !try(candidate) {
+			if !attempt(candidate) {
 				continue
 			}
 			// Update v and reset the loop with the new length.
@@ -74,7 +74,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 		}
 	}
 
-	// Then, try to make it more simplified and human-readable by trying to replace each
+	// Then, attempt to make it more simplified and human-readable by trying to replace each
 	// byte with a printable character.
 	printableChars := []byte("012789ABCXYZabcxyz !\"#$%&'()*+,.")
 	for i, b := range v {
@@ -84,7 +84,7 @@ func minimizeBytes(v []byte, try func([]byte) bool, shouldStop func() bool) {
 
 		for _, pc := range printableChars {
 			v[i] = pc
-			if try(v) {
+			if attempt(v) {
 				// Successful. Move on to the next byte in v.
 				break
 			}

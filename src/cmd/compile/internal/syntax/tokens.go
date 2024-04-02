@@ -66,6 +66,8 @@ const (
 	_Struct      // struct
 	_Switch      // switch
 	_Type        // type
+	_Try         // try
+	_Or          // or
 	_Var         // var
 
 	// empty line comment to exclude it from .String

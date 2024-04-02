@@ -59,8 +59,8 @@ L:
 			continue
 		case archive.EntryNativeObj:
 			nr := io.NewSectionReader(f, e.Offset, e.Size)
-			for _, try := range openers {
-				if raw, err := try(nr); err == nil {
+			for _, attempt := range openers {
+				if raw, err := attempt(nr); err == nil {
 					entries = append(entries, &Entry{
 						name: e.Name,
 						raw:  raw,
