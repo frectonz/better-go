@@ -891,6 +891,19 @@ func (check *Checker) declStmt(list []syntax.Decl) {
 				check.declare(check.scope, name, lhs0[i], scopePos)
 			}
 
+		case *syntax.TryDecl:
+			top := len(check.delayed)
+
+			obj := NewVar(s.Name.Pos(), pkg, s.Name.Value, nil)
+
+			rhs, _ := check.multiExpr(s.Value, false)
+			check.initVar(obj, rhs[0], "variable declaration")
+
+			check.processDelayed(top)
+
+			scopePos := syntax.EndPos(s)
+			check.declare(check.scope, s.Name, obj, scopePos)
+
 		case *syntax.TypeDecl:
 			obj := NewTypeName(s.Name.Pos(), pkg, s.Name.Value, nil)
 			// spec: "The scope of a type identifier declared inside a function

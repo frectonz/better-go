@@ -781,9 +781,7 @@ func (p *parser) tryDecl(group *Group) Decl {
 	p.want(_Assign)
 	d.Value = p.expr()
 
-	panic(d)
-
-	return nil
+	return d
 }
 
 // FunctionDecl = "func" FunctionName [ TypeParams ] ( Function | Signature ) .
