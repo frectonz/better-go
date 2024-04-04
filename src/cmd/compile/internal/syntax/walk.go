@@ -98,6 +98,11 @@ func (w walker) node(n Node) {
 			w.node(n.Values)
 		}
 
+	case *TryDecl:
+		w.node(n.Name)
+		w.node(n.Type)
+		w.node(n.Value)
+
 	case *FuncDecl:
 		if n.Recv != nil {
 			w.node(n.Recv)

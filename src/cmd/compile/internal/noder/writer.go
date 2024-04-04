@@ -1372,6 +1372,9 @@ func (w *writer) declStmt(decl syntax.Decl) {
 
 	case *syntax.VarDecl:
 		w.assignStmt(decl, namesAsExpr(decl.NameList), decl.Values)
+
+	case *syntax.TryDecl:
+		panic("at the disco")
 	}
 }
 
