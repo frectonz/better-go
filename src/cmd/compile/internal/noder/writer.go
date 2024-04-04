@@ -1374,8 +1374,21 @@ func (w *writer) declStmt(decl syntax.Decl) {
 		w.assignStmt(decl, namesAsExpr(decl.NameList), decl.Values)
 
 	case *syntax.TryDecl:
-		panic("at the disco")
+		w.Code(stmtTry)
+		w.tryStmt(decl)
 	}
+}
+
+func (w *writer) tryStmt(stmt *syntax.TryDecl) {
+	w.Sync(pkgbits.SyncTryStmt)
+	w.openScope(stmt.Pos())
+
+	w.pos(stmt)
+	w.assign(stmt.Name)
+	w.String(syntax.String(stmt.Type))
+	w.expr(stmt.Value)
+
+	w.closeAnotherScope()
 }
 
 // assignStmt writes out an assignment for "lhs = rhs".

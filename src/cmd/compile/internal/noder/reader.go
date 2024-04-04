@@ -1693,6 +1693,9 @@ func (r *reader) stmt1(tag codeStmt, out *ir.Nodes) ir.Node {
 	case stmtFor:
 		return r.forStmt(label)
 
+	case stmtTry:
+		panic("at the disco")
+
 	case stmtIf:
 		return r.ifStmt()
 
