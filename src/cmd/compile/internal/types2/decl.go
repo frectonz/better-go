@@ -894,6 +894,7 @@ func (check *Checker) declStmt(list []syntax.Decl) {
 		case *syntax.TryDecl:
 			top := len(check.delayed)
 
+			check.typ(s.Type)
 			obj := NewVar(s.Name.Pos(), pkg, s.Name.Value, nil)
 
 			rhs, _ := check.multiExpr(s.Value, false)
