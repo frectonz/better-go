@@ -87,6 +87,9 @@ func (e *escape) stmt(n ir.Node) {
 		e.block(n.Body)
 		e.loopDepth--
 
+	case ir.OTRY:
+		panic("at the disco")
+
 	case ir.ORANGE:
 		// for Key, Value = range X { Body }
 		n := n.(*ir.RangeStmt)

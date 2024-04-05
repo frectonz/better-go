@@ -550,6 +550,10 @@ func typecheck1(n ir.Node, top int) ir.Node {
 		n := n.(*ir.ForStmt)
 		return tcFor(n)
 
+	case ir.OTRY:
+		n := n.(*ir.TryStmt)
+		return tcTry(n)
+
 	case ir.OIF:
 		n := n.(*ir.IfStmt)
 		return tcIf(n)

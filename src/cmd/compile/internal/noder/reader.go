@@ -1694,7 +1694,7 @@ func (r *reader) stmt1(tag codeStmt, out *ir.Nodes) ir.Node {
 		return r.forStmt(label)
 
 	case stmtTry:
-		panic("at the disco")
+		return r.tryStmt()
 
 	case stmtIf:
 		return r.ifStmt()
@@ -1819,6 +1819,21 @@ func (r *reader) forStmt(label *types.Sym) ir.Node {
 
 	stmt := ir.NewForStmt(pos, init, cond, post, body, perLoopVars)
 	stmt.Label = label
+	return stmt
+}
+
+func (r *reader) tryStmt() ir.Node {
+	r.Sync(pkgbits.SyncTryStmt)
+	r.openScope()
+
+	pos := r.pos()
+	name, _ := r.assign()
+	type_ := r.exprType()
+	value := r.expr()
+
+	r.closeAnotherScope()
+
+	stmt := ir.NewTryStmt(pos, name, type_, value)
 	return stmt
 }
 

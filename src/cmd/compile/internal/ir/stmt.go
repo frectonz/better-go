@@ -109,6 +109,20 @@ func (n *AssignStmt) SetOp(op Op) {
 	}
 }
 
+type TryStmt struct {
+	miniStmt
+	TheName  Node
+	TheType  Node
+	TheValue Node
+}
+
+func NewTryStmt(pos src.XPos, name, type_, value Node) *TryStmt {
+	n := &TryStmt{TheName: name, TheType: type_, TheValue: value}
+	n.pos = pos
+	n.op = OTRY
+	return n
+}
+
 // An AssignOpStmt is an AsOp= assignment statement: X AsOp= Y.
 type AssignOpStmt struct {
 	miniStmt

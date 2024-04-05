@@ -198,6 +198,13 @@ func tcFor(n *ir.ForStmt) ir.Node {
 	return n
 }
 
+func tcTry(n *ir.TryStmt) ir.Node {
+  n.TheName = Expr(n.TheName)
+  n.TheType = Expr(n.TheType)
+  n.TheValue = Expr(n.TheValue)
+  return n
+}
+
 // tcGoDefer typechecks (normalizes) an OGO/ODEFER statement.
 func tcGoDefer(n *ir.GoDeferStmt) {
 	call := normalizeGoDeferCall(n.Pos(), n.Op(), n.Call, n.PtrInit())

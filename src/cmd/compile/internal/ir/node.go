@@ -265,14 +265,15 @@ const (
 	ODEFER    // defer Call
 	OFALL     // fallthrough
 	OFOR      // for Init; Cond; Post { Body }
-	OGOTO     // goto Label
-	OIF       // if Init; Cond { Then } else { Else }
-	OLABEL    // Label:
-	OGO       // go Call
-	ORANGE    // for Key, Value = range X { Body }
-	ORETURN   // return Results
-	OSELECT   // select { Cases }
-	OSWITCH   // switch Init; Expr { Cases }
+	OTRY
+	OGOTO   // goto Label
+	OIF     // if Init; Cond { Then } else { Else }
+	OLABEL  // Label:
+	OGO     // go Call
+	ORANGE  // for Key, Value = range X { Body }
+	ORETURN // return Results
+	OSELECT // select { Cases }
+	OSWITCH // switch Init; Expr { Cases }
 	// OTYPESW:  X := Y.(type) (appears as .Tag of OSWITCH)
 	//   X is nil if there is no type-switch variable
 	OTYPESW

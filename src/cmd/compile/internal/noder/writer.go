@@ -1385,7 +1385,7 @@ func (w *writer) tryStmt(stmt *syntax.TryDecl) {
 
 	w.pos(stmt)
 	w.assign(stmt.Name)
-	w.String(syntax.String(stmt.Type))
+	w.exprType(nil, stmt.Type)
 	w.expr(stmt.Value)
 
 	w.closeAnotherScope()
