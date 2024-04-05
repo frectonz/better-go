@@ -88,7 +88,10 @@ func (e *escape) stmt(n ir.Node) {
 		e.loopDepth--
 
 	case ir.OTRY:
-		panic("at the disco")
+		n := n.(*ir.TryStmt)
+		e.dcl(n.TheName.Name())
+		e.discard(n.TheType)
+		e.call(nil, n.TheValue)
 
 	case ir.ORANGE:
 		// for Key, Value = range X { Body }

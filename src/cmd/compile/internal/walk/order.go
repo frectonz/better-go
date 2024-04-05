@@ -835,6 +835,9 @@ func (o *orderState) stmt(n ir.Node) {
 		o.out = append(o.out, n)
 		o.popTemp(t)
 
+	case ir.OTRY:
+		panic("at the disco")
+
 	// Clean temporaries from condition at
 	// beginning of both branches.
 	case ir.OIF:
