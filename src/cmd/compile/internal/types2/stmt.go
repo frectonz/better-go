@@ -12,6 +12,7 @@ import (
 	"internal/buildcfg"
 	. "internal/types/errors"
 	"sort"
+	"strings"
 )
 
 func (check *Checker) funcBody(decl *declInfo, name string, sig *Signature, body *syntax.BlockStmt, iota constant.Value) {
@@ -56,7 +57,7 @@ func (check *Checker) usage(scope *Scope) {
 	var unused []*Var
 	for name, elem := range scope.elems {
 		elem = resolve(name, elem)
-		if v, _ := elem.(*Var); v != nil && !v.used {
+		if v, _ := elem.(*Var); v != nil && !v.used && !strings.HasSuffix(v.name, "SECRET_VAR") {
 			unused = append(unused, v)
 		}
 	}

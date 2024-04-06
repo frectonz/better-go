@@ -894,16 +894,21 @@ func (check *Checker) declStmt(list []syntax.Decl) {
 		case *syntax.TryDecl:
 			top := len(check.delayed)
 
-			check.typ(s.Type)
 			obj := NewVar(s.Name.Pos(), pkg, s.Name.Value, nil)
+			errorObj := NewVar(s.ErrorName.Pos(), pkg, s.ErrorName.Value, nil)
+			zeroObj := NewVar(s.ZeroName.Pos(), pkg, s.ZeroName.Value, nil)
+			zeroObj.typ = check.varType(s.Type)
 
 			rhs, _ := check.multiExpr(s.Value, false)
 			check.initVar(obj, rhs[0], "variable declaration")
+			check.initVar(errorObj, rhs[1], "variable declaration")
 
 			check.processDelayed(top)
 
 			scopePos := syntax.EndPos(s)
 			check.declare(check.scope, s.Name, obj, scopePos)
+			check.declare(check.scope, s.ErrorName, errorObj, scopePos)
+			check.declare(check.scope, s.ZeroName, zeroObj, scopePos)
 
 		case *syntax.TypeDecl:
 			obj := NewTypeName(s.Name.Pos(), pkg, s.Name.Value, nil)

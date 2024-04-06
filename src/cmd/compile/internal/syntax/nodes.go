@@ -99,11 +99,13 @@ type (
 	}
 
 	TryDecl struct {
-		Group  *Group // nil means not part of a group
-		Pragma Pragma
-		Name   *Name
-		Type   Expr // nil means no type
-		Value  Expr // nil means no value
+		Group     *Group // nil means not part of a group
+		Pragma    Pragma
+		Name      *Name
+		ErrorName *Name
+		ZeroName  *Name
+		Type      Expr // nil means no type
+		Value     Expr // nil means no value
 		decl
 	}
 

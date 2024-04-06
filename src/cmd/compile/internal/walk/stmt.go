@@ -127,6 +127,10 @@ func walkStmt(n ir.Node) ir.Node {
 		n := n.(*ir.ForStmt)
 		return walkFor(n)
 
+	case ir.OTRY:
+		n := n.(*ir.TryStmt)
+		return walkTry(n)
+
 	case ir.OIF:
 		n := n.(*ir.IfStmt)
 		return walkIf(n)
@@ -189,6 +193,10 @@ func walkFor(n *ir.ForStmt) ir.Node {
 	n.Post = walkStmt(n.Post)
 	walkStmtList(n.Body)
 	return n
+}
+
+func walkTry(n *ir.TryStmt) ir.Node {
+	return ir.NewBlockStmt(n.Pos(), []ir.Node{n.TheDefine, n.TheIf})
 }
 
 // validGoDeferCall reports whether call is a valid call to appear in

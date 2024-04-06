@@ -1828,12 +1828,14 @@ func (r *reader) tryStmt() ir.Node {
 
 	pos := r.pos()
 	name, _ := r.assign()
+	errorName, _ := r.assign()
+	zeroName, _ := r.assign()
 	type_ := r.exprType()
 	value := r.expr()
 
 	r.closeAnotherScope()
 
-	stmt := ir.NewTryStmt(pos, name, type_, value)
+	stmt := ir.NewTryStmt(pos, name, errorName, zeroName, type_, value)
 	return stmt
 }
 

@@ -776,12 +776,25 @@ func (p *parser) tryDecl(group *Group) Decl {
 	d.Pragma = p.takePragma()
 
 	d.Name = p.name()
+	d.ErrorName = createErrorName(*d.Name)
+	d.ZeroName = createZeroName(*d.Name)
+
 	p.want(_Or)
 	d.Type = p.type_()
 	p.want(_Assign)
 	d.Value = p.expr()
 
 	return d
+}
+
+func createErrorName(n Name) *Name {
+	n.Value = fmt.Sprintf("%s_err_SECRET_VAR", n.Value)
+	return &n
+}
+
+func createZeroName(n Name) *Name {
+	n.Value = fmt.Sprintf("%s_zero_SECRET_VAR", n.Value)
+	return &n
 }
 
 // FunctionDecl = "func" FunctionName [ TypeParams ] ( Function | Signature ) .

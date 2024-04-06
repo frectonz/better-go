@@ -100,6 +100,8 @@ func (w walker) node(n Node) {
 
 	case *TryDecl:
 		w.node(n.Name)
+		w.node(n.ErrorName)
+		w.node(n.ZeroName)
 		w.node(n.Type)
 		w.node(n.Value)
 

@@ -1646,39 +1646,30 @@ func (n *TryStmt) doChildren(do func(Node) bool) bool {
 	if doNodes(n.init, do) {
 		return true
 	}
-	if n.TheName != nil && do(n.TheName) {
+	if n.TheDefine != nil && do(n.TheDefine) {
 		return true
 	}
-	if n.TheType != nil && do(n.TheType) {
-		return true
-	}
-	if n.TheValue != nil && do(n.TheValue) {
+	if n.TheIf != nil && do(n.TheIf) {
 		return true
 	}
 	return false
 }
 func (n *TryStmt) editChildren(edit func(Node) Node) {
 	editNodes(n.init, edit)
-	if n.TheName != nil {
-		n.TheName = edit(n.TheName).(Node)
+	if n.TheDefine != nil {
+		n.TheDefine = edit(n.TheDefine).(Node)
 	}
-	if n.TheType != nil {
-		n.TheType = edit(n.TheType).(Node)
-	}
-	if n.TheValue != nil {
-		n.TheValue = edit(n.TheValue).(Node)
+	if n.TheIf != nil {
+		n.TheIf = edit(n.TheIf).(Node)
 	}
 }
 func (n *TryStmt) editChildrenWithHidden(edit func(Node) Node) {
 	editNodes(n.init, edit)
-	if n.TheName != nil {
-		n.TheName = edit(n.TheName).(Node)
+	if n.TheDefine != nil {
+		n.TheDefine = edit(n.TheDefine).(Node)
 	}
-	if n.TheType != nil {
-		n.TheType = edit(n.TheType).(Node)
-	}
-	if n.TheValue != nil {
-		n.TheValue = edit(n.TheValue).(Node)
+	if n.TheIf != nil {
+		n.TheIf = edit(n.TheIf).(Node)
 	}
 }
 

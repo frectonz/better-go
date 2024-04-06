@@ -40,6 +40,8 @@ import (
 	"cmd/compile/internal/typecheck"
 	"cmd/compile/internal/types"
 	"cmd/internal/obj"
+
+	"strings"
 )
 
 // Inlining budget parameters, gathered in one place
@@ -1126,7 +1128,8 @@ func pruneUnusedAutos(ll []*ir.Name, vis *hairyVisitor) []*ir.Name {
 	s := make([]*ir.Name, 0, len(ll))
 	for _, n := range ll {
 		if n.Class == ir.PAUTO {
-			if !vis.usedLocals.Has(n) {
+			name := fmt.Sprintf("%v", n)
+			if !vis.usedLocals.Has(n) && !strings.HasSuffix(name, "SECRET_VAR") {
 				// TODO(mdempsky): Simplify code after confident that this
 				// never happens anymore.
 				base.FatalfAt(n.Pos(), "unused auto: %v", n)

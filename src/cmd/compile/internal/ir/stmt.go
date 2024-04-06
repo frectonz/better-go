@@ -111,15 +111,46 @@ func (n *AssignStmt) SetOp(op Op) {
 
 type TryStmt struct {
 	miniStmt
-	TheName  Node
-	TheType  Node
-	TheValue Node
+	//TheName  Node
+	//TheError Node
+	//TheZero  Node
+	//TheType  Node
+	//TheValue Node
+
+	TheDefine Node
+	TheIf     Node
+
+	//TheBlock Node
 }
 
-func NewTryStmt(pos src.XPos, name, type_, value Node) *TryStmt {
-	n := &TryStmt{TheName: name, TheType: type_, TheValue: value}
+func NewTryStmt(pos src.XPos, name, errorName, zeroName, type_, value Node) *TryStmt {
+	defineStmt := NewAssignListStmt(pos, OAS2, []Node{name, errorName}, []Node{value})
+
+	aNil := NewNilExpr(pos, types.Types[types.TNIL])
+	condStmt := NewBinaryExpr(pos, ONE, errorName, aNil)
+
+	zeroValueVar := NewDecl(pos, ODCL, zeroName.Name())
+	returnStmt := NewReturnStmt(pos, []Node{zeroName.Name(), errorName})
+	bodyBlock := []Node{zeroValueVar, returnStmt}
+
+	ifStmt := NewIfStmt(pos, condStmt, bodyBlock, nil)
+	//block := NewBlockStmt(pos, []Node{defineStmt, ifStmt})
+
+	n := &TryStmt{
+		//TheName:   name,
+		//TheError:  errorName,
+		//TheZero:   zeroName,
+		//TheType:   type_,
+		//TheValue:  value,
+
+		TheDefine: defineStmt,
+		TheIf:     ifStmt,
+
+		//TheBlock:  block,
+	}
 	n.pos = pos
 	n.op = OTRY
+
 	return n
 }
 

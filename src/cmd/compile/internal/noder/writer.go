@@ -1385,6 +1385,8 @@ func (w *writer) tryStmt(stmt *syntax.TryDecl) {
 
 	w.pos(stmt)
 	w.assign(stmt.Name)
+	w.assign(stmt.ErrorName)
+	w.assign(stmt.ZeroName)
 	w.exprType(nil, stmt.Type)
 	w.expr(stmt.Value)
 

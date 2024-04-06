@@ -836,7 +836,11 @@ func (o *orderState) stmt(n ir.Node) {
 		o.popTemp(t)
 
 	case ir.OTRY:
-		panic("at the disco")
+		n := n.(*ir.TryStmt)
+		define := n.TheDefine.(*ir.AssignListStmt)
+		o.as2func(define)
+		n.TheIf = o.exprInPlace(n.TheIf)
+		o.out = append(o.out, n)
 
 	// Clean temporaries from condition at
 	// beginning of both branches.

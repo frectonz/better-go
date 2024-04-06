@@ -199,10 +199,16 @@ func tcFor(n *ir.ForStmt) ir.Node {
 }
 
 func tcTry(n *ir.TryStmt) ir.Node {
-  n.TheName = Expr(n.TheName)
-  n.TheType = Expr(n.TheType)
-  n.TheValue = Expr(n.TheValue)
-  return n
+	//n.TheName = Expr(n.TheName)
+	//n.TheError = Expr(n.TheError)
+	//n.TheType = Expr(n.TheType)
+	//n.TheValue = Expr(n.TheValue)
+
+	n.TheDefine = Expr(n.TheDefine)
+	n.TheIf = Expr(n.TheIf)
+
+	//n.TheBlock = Expr(n.TheBlock)
+	return n
 }
 
 // tcGoDefer typechecks (normalizes) an OGO/ODEFER statement.
