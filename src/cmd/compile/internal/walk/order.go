@@ -837,9 +837,6 @@ func (o *orderState) stmt(n ir.Node) {
 
 	case ir.OTRY:
 		n := n.(*ir.TryStmt)
-		define := n.TheDefine.(*ir.AssignListStmt)
-		o.as2func(define)
-		n.TheIf = o.exprInPlace(n.TheIf)
 		o.out = append(o.out, n)
 
 	// Clean temporaries from condition at

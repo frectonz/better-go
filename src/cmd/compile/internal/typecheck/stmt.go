@@ -9,6 +9,7 @@ import (
 	"cmd/compile/internal/ir"
 	"cmd/compile/internal/types"
 	"cmd/internal/src"
+	"fmt"
 	"internal/types/errors"
 )
 
@@ -199,15 +200,10 @@ func tcFor(n *ir.ForStmt) ir.Node {
 }
 
 func tcTry(n *ir.TryStmt) ir.Node {
-	//n.TheName = Expr(n.TheName)
-	//n.TheError = Expr(n.TheError)
-	//n.TheType = Expr(n.TheType)
-	//n.TheValue = Expr(n.TheValue)
-
-	n.TheDefine = Expr(n.TheDefine)
-	n.TheIf = Expr(n.TheIf)
-
-	//n.TheBlock = Expr(n.TheBlock)
+	fmt.Println("start typecheck")
+	n.TheDefine = Stmt(n.TheDefine)
+	n.TheIf = Stmt(n.TheIf)
+	fmt.Println("end typecheck")
 	return n
 }
 

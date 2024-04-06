@@ -89,11 +89,6 @@ func (e *escape) stmt(n ir.Node) {
 
 	case ir.OTRY:
 		n := n.(*ir.TryStmt)
-		//e.dcl(n.TheName.Name())
-		//e.dcl(n.TheError.Name())
-		//e.dcl(n.TheZero.Name())
-		//e.discard(n.TheType)
-		//e.call(nil, n.TheValue)
 		e.stmt(n.TheDefine)
 		e.stmt(n.TheIf)
 
