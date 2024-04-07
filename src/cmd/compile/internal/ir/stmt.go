@@ -125,6 +125,7 @@ type TryStmt struct {
 
 func NewTryStmt(pos src.XPos, name, errorName, zeroName, type_, value Node) *TryStmt {
 	defineStmt := NewAssignListStmt(pos, OAS2FUNC, []Node{name, errorName}, []Node{value})
+	defineStmt.Def = true
 
 	aNil := NewNilExpr(pos, types.Types[types.TNIL])
 	condStmt := NewBinaryExpr(pos, ONE, errorName, aNil)

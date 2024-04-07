@@ -201,7 +201,7 @@ func tcFor(n *ir.ForStmt) ir.Node {
 
 func tcTry(n *ir.TryStmt) ir.Node {
 	fmt.Println("start typecheck")
-	n.TheDefine = Stmt(n.TheDefine)
+	n.TheDefine = AssignExpr(n.TheDefine)
 	n.TheIf = Stmt(n.TheIf)
 	fmt.Println("end typecheck")
 	return n

@@ -894,16 +894,12 @@ func (check *Checker) declStmt(list []syntax.Decl) {
 		case *syntax.TryDecl:
 			top := len(check.delayed)
 
-			rhs, _ := check.multiExpr(s.Value, false)
+			rhs, _ := check.multiExpr(s.Value, true)
+			fmt.Println(rhs[0].typ, rhs[1].typ)
 
-			obj := NewVar(s.Name.Pos(), pkg, s.Name.Value, nil)
-			obj.typ = rhs[0].typ
-
-			errorObj := NewVar(s.ErrorName.Pos(), pkg, s.ErrorName.Value, nil)
-			errorObj.typ = rhs[1].typ
-
-			zeroObj := NewVar(s.ZeroName.Pos(), pkg, s.ZeroName.Value, nil)
-			zeroObj.typ = check.varType(s.Type)
+			obj := NewVar(s.Name.Pos(), pkg, s.Name.Value, rhs[0].typ)
+			errorObj := NewVar(s.ErrorName.Pos(), pkg, s.ErrorName.Value, rhs[1].typ)
+			zeroObj := NewVar(s.ZeroName.Pos(), pkg, s.ZeroName.Value, check.varType(s.Type))
 
 			check.processDelayed(top)
 

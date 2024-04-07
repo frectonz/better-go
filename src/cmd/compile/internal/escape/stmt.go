@@ -89,8 +89,10 @@ func (e *escape) stmt(n ir.Node) {
 
 	case ir.OTRY:
 		n := n.(*ir.TryStmt)
+		fmt.Println("start escape")
 		e.stmt(n.TheDefine)
 		e.stmt(n.TheIf)
+		fmt.Println("end escape")
 
 	case ir.ORANGE:
 		// for Key, Value = range X { Body }

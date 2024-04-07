@@ -837,6 +837,8 @@ func (o *orderState) stmt(n ir.Node) {
 
 	case ir.OTRY:
 		n := n.(*ir.TryStmt)
+		o.stmt(n.TheDefine)
+		o.stmt(n.TheIf)
 		o.out = append(o.out, n)
 
 	// Clean temporaries from condition at
