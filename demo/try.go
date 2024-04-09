@@ -18,5 +18,5 @@ func readFile(filename string) (string, error) {
 	content, err := ioutil.ReadFile(filename)
 	try err or string
 
-	return string(c), nil
+	return string(content), nil
 }

@@ -667,6 +667,22 @@ func (check *Checker) stmt(ctxt stmtContext, s syntax.Stmt) {
 		}
 		check.stmt(inner, s.Body)
 
+	case *syntax.TryStmt:
+		check.openScope(s, "try")
+		defer check.closeScope()
+
+		check.typ(s.Type)
+		ident := s.Value
+		obj := check.lookup(ident.Value)
+
+		if v, _ := obj.(*Var); v != nil {
+			v.used = true
+		}
+
+		if obj.Type() != universeError {
+			check.error(s.Value, InvalidSyntaxTree, "variable used with try is not an error")
+		}
+
 	default:
 		check.error(s, InvalidSyntaxTree, "invalid statement")
 	}
