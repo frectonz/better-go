@@ -2541,6 +2541,22 @@ func (p *parser) commClause() *CommClause {
 	return c
 }
 
+func (p *parser) tryStmt() *TryStmt {
+	if trace {
+		defer p.trace("tryStmt")()
+	}
+
+	s := new(TryStmt)
+	s.pos = p.pos()
+
+	p.want(_Try)
+	s.Value = p.name()
+	p.want(_Or)
+	s.Type = p.type_()
+
+	return s
+}
+
 // stmtOrNil parses a statement if one is present, or else returns nil.
 //
 //	Statement =
@@ -2603,6 +2619,9 @@ func (p *parser) stmtOrNil() Stmt {
 
 	case _If:
 		return p.ifStmt()
+
+	case _Try:
+		return p.tryStmt()
 
 	case _Fallthrough:
 		s := new(BranchStmt)

@@ -308,6 +308,14 @@ func (w walker) node(n Node) {
 		}
 		w.stmtList(n.Body)
 
+	case *TryStmt:
+		if n.Type != nil {
+			w.node(n.Type)
+		}
+		if n.Value != nil {
+			w.node(n.Value)
+		}
+
 	default:
 		panic(fmt.Sprintf("internal error: unknown node type %T", n))
 	}

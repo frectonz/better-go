@@ -431,6 +431,12 @@ type (
 		Rbrace Pos
 		stmt
 	}
+
+	TryStmt struct {
+		Type  Expr
+		Value *Name
+		stmt
+	}
 )
 
 type (
