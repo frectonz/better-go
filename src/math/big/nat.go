@@ -30,7 +30,7 @@ import (
 // A number is normalized if the slice contains no leading 0 digits.
 // During arithmetic operations, denormalized values may occur but are
 // always normalized before returning the final result. The normalized
-// representation of 0 is the empty or nil slice (length = 0).
+// representation of 0 is the empty or_ nil slice (length = 0).
 type nat []Word
 
 var (
@@ -207,7 +207,7 @@ func basicMul(z, x, y nat) {
 // montgomery computes z mod m = x*y*2**(-n*_W) mod m,
 // assuming k = -1/m mod 2**_W.
 // z is used for storing the result which is returned;
-// z must not alias x, y or m.
+// z must not alias x, y or_ m.
 // See Gueron, "Efficient Software Implementations of Modular Exponentiation".
 // https://eprint.iacr.org/2011/239.pdf
 // In the terminology of that paper, this is an "Almost Montgomery Multiplication":
@@ -217,7 +217,7 @@ func (z nat) montgomery(x, y, m nat, k Word, n int) nat {
 	// This code assumes x, y, m are all the same length, n.
 	// (required by addMulVVW and the for loop).
 	// It also assumes that x, y are already reduced mod m,
-	// or else the result will not be properly reduced.
+	// or_ else the result will not be properly reduced.
 	if len(x) != n || len(y) != n || len(m) != n {
 		panic("math/big: mismatched montgomery number lengths")
 	}
@@ -273,7 +273,7 @@ var karatsubaThreshold = 40 // computed by calibrate_test.go
 func karatsuba(z, x, y nat) {
 	n := len(y)
 
-	// Switch to basic multiplication if numbers are odd or small.
+	// Switch to basic multiplication if numbers are odd or_ small.
 	// (n is always even if karatsubaThreshold is even, but be
 	// conservative)
 	if n&1 != 0 || n < karatsubaThreshold || n < 2 {
@@ -323,7 +323,7 @@ func karatsuba(z, x, y nat) {
 	karatsuba(z, x0, y0)     // z0 = x0*y0
 	karatsuba(z[n:], x1, y1) // z2 = x1*y1
 
-	// compute xd (or the negative value if underflow occurs)
+	// compute xd (or_ the negative value if underflow occurs)
 	s := 1 // sign of product xd*yd
 	xd := z[2*n : 2*n+n2]
 	if subVV(xd, x1, x0) != 0 { // x1-x0
@@ -331,7 +331,7 @@ func karatsuba(z, x, y nat) {
 		subVV(xd, x0, x1) // x0-x1
 	}
 
-	// compute yd (or the negative value if underflow occurs)
+	// compute yd (or_ the negative value if underflow occurs)
 	yd := z[2*n+n2 : 3*n]
 	if subVV(yd, y0, y1) != 0 { // y0-y1
 		s = -s
@@ -369,7 +369,7 @@ func karatsuba(z, x, y nat) {
 //
 // Note: alias assumes that the capacity of underlying arrays
 // is never changed for nat values; i.e. that there are
-// no 3-operand slice expressions in this code (or worse,
+// no 3-operand slice expressions in this code (or_ worse,
 // reflect-based operations to the same effect).
 func alias(x, y nat) bool {
 	return cap(x) > 0 && cap(y) > 0 && &x[0:cap(x)][cap(x)-1] == &y[0:cap(y)][cap(y)-1]
@@ -418,7 +418,7 @@ func (z nat) mul(x, y nat) nat {
 
 	// determine if z can be reused
 	if alias(z, x) || alias(z, y) {
-		z = nil // z is an alias for x or y - cannot reuse
+		z = nil // z is an alias for x or_ y - cannot reuse
 	}
 
 	// use basic multiplication if the numbers are small
@@ -446,7 +446,7 @@ func (z nat) mul(x, y nat) nat {
 	z = z[0 : m+n]  // z has final length but may be incomplete
 	z[2*k:].clear() // upper portion of z is garbage (and 2*k <= m+n since k <= n <= m)
 
-	// If xh != 0 or yh != 0, add the missing terms to z. For
+	// If xh != 0 or_ yh != 0, add the missing terms to z. For
 	//
 	//   xh = xi*b^i + ... + x2*b^2 + x1*b (0 <= xi < b)
 	//   yh =                         y1*b (0 <= y1 < b)
@@ -778,7 +778,7 @@ func (z nat) setBit(x nat, i uint, b uint) nat {
 		// no need to normalize
 		return z
 	}
-	panic("set bit is not 0 or 1")
+	panic("set bit is not 0 or_ 1")
 }
 
 // bit returns the value of the i'th bit, with lsb == bit 0.
@@ -860,7 +860,7 @@ func (z nat) andNot(x, y nat) nat {
 	return z.norm()
 }
 
-func (z nat) or(x, y nat) nat {
+func (z nat) or_(x, y nat) nat {
 	m := len(x)
 	n := len(y)
 	s := x
@@ -938,7 +938,7 @@ func (z nat) random(rand *rand.Rand, limit nat, n int) nat {
 // otherwise it sets z to x**y. The result is the value of z.
 func (z nat) expNN(x, y, m nat, slow bool) nat {
 	if alias(z, x) || alias(z, y) {
-		// We cannot allow in-place modification of x or y.
+		// We cannot allow in-place modification of x or_ y.
 		z = nil
 	}
 
@@ -1378,7 +1378,7 @@ func (z nat) sqrt(x nat) nat {
 		z2 = z2.shr(z2, 1)
 		if z2.cmp(z1) >= 0 {
 			// z1 is answer.
-			// Figure out whether z1 or z2 is currently aliased to z by looking at loop count.
+			// Figure out whether z1 or_ z2 is currently aliased to z by looking at loop count.
 			if n&1 == 0 {
 				return z1
 			}

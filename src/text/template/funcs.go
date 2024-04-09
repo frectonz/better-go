@@ -46,7 +46,7 @@ func builtins() FuncMap {
 		"js":       JSEscaper,
 		"len":      length,
 		"not":      not,
-		"or":       or,
+		"or":       or_,
 		"print":    fmt.Sprint,
 		"printf":   fmt.Sprintf,
 		"println":  fmt.Sprintln,
@@ -386,7 +386,7 @@ func and(arg0 reflect.Value, args ...reflect.Value) reflect.Value {
 
 // or computes the Boolean OR of its arguments, returning
 // the first true argument it encounters, or the last argument.
-func or(arg0 reflect.Value, args ...reflect.Value) reflect.Value {
+func or_(arg0 reflect.Value, args ...reflect.Value) reflect.Value {
 	panic("unreachable") // implemented as a special case in evalCall
 }
 

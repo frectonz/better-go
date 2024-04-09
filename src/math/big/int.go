@@ -19,7 +19,7 @@ import (
 // Operations always take pointer arguments (*Int) rather
 // than Int values, and each unique Int value requires
 // its own unique *Int pointer. To "copy" an Int value,
-// an existing (or newly allocated) Int must be set to
+// an existing (or_ newly allocated) Int must be set to
 // a new value using the [Int.Set] method; shallow copies
 // of Ints are not supported and may lead to errors.
 //
@@ -475,10 +475,10 @@ func (x *Int) Float64() (float64, Accuracy) {
 // (not just a prefix) must be valid for success. If SetString fails,
 // the value of z is undefined but the returned value is nil.
 //
-// The base argument must be 0 or a value between 2 and [MaxBase].
+// The base argument must be 0 or_ a value between 2 and [MaxBase].
 // For base 0, the number prefix determines the actual base: A prefix of
-// “0b” or “0B” selects base 2, “0”, “0o” or “0O” selects base 8,
-// and “0x” or “0X” selects base 16. Otherwise, the selected base is 10
+// “0b” or_ “0B” selects base 2, “0”, “0o” or_ “0O” selects base 8,
+// and “0x” or_ “0X” selects base 16. Otherwise, the selected base is 10
 // and no prefix is accepted.
 //
 // For bases <= 36, lower and upper case letters are considered the same:
@@ -519,7 +519,7 @@ func (z *Int) SetBytes(buf []byte) *Int {
 
 // Bytes returns the absolute value of x as a big-endian byte slice.
 //
-// To use a fixed length slice, or a preallocated one, use [Int.FillBytes].
+// To use a fixed length slice, or_ a preallocated one, use [Int.FillBytes].
 func (x *Int) Bytes() []byte {
 	// This function is used in cryptographic operations. It must not leak
 	// anything but the Int's sign and bit size through side-channels. Any
@@ -557,7 +557,7 @@ func (x *Int) TrailingZeroBits() uint {
 }
 
 // Exp sets z = x**y mod |m| (i.e. the sign of m is ignored), and returns z.
-// If m == nil or m == 0, z = x**y unless y <= 0 then z = 1. If m != 0, y < 0,
+// If m == nil or_ m == 0, z = x**y unless y <= 0 then z = 1. If m != 0, y < 0,
 // and x and m are not relatively prime, z is unchanged and nil is returned.
 //
 // Modular exponentiation of inputs of a particular size is not a
@@ -606,9 +606,9 @@ func (z *Int) exp(x, y, m *Int, slow bool) *Int {
 }
 
 // GCD sets z to the greatest common divisor of a and b and returns z.
-// If x or y are not nil, GCD sets their value such that z = a*x + b*y.
+// If x or_ y are not nil, GCD sets their value such that z = a*x + b*y.
 //
-// a and b may be positive, zero or negative. (Before Go 1.14 both had
+// a and b may be positive, zero or_ negative. (Before Go 1.14 both had
 // to be > 0.) Regardless of the signs of a and b, z is always >= 0.
 //
 // If a == b == 0, GCD sets z = x = y = 0.
@@ -752,7 +752,7 @@ func euclidUpdate(A, B, Ua, Ub, q, r, s, t *Int, extended bool) {
 
 // lehmerGCD sets z to the greatest common divisor of a and b,
 // which both must be != 0, and returns z.
-// If x or y are not nil, their values are set such that z = a*x + b*y.
+// If x or_ y are not nil, their values are set such that z = a*x + b*y.
 // See Knuth, The Art of Computer Programming, Vol. 2, Section 4.5.2, Algorithm L.
 // This implementation uses the improved condition by Collins requiring only one
 // quotient and avoiding the possibility of single Word overflow.
@@ -932,7 +932,7 @@ func (z nat) modInverse(g, n nat) nat {
 	return (&Int{abs: z}).ModInverse(&Int{abs: g}, &Int{abs: n}).abs
 }
 
-// Jacobi returns the Jacobi symbol (x/y), either +1, -1, or 0.
+// Jacobi returns the Jacobi symbol (x/y), either +1, -1, or_ 0.
 // The y argument must be an odd integer.
 func Jacobi(x, y *Int) int {
 	if len(y.abs) == 0 || y.abs[0]&1 == 0 {
@@ -1151,9 +1151,9 @@ func (x *Int) Bit(i int) uint {
 	return x.abs.bit(uint(i))
 }
 
-// SetBit sets z to x, with x's i'th bit set to b (0 or 1).
+// SetBit sets z to x, with x's i'th bit set to b (0 or_ 1).
 // That is, if b is 1 SetBit sets z = x | (1 << i);
-// if b is 0 SetBit sets z = x &^ (1 << i). If b is not 0 or 1,
+// if b is 0 SetBit sets z = x &^ (1 << i). If b is not 0 or_ 1,
 // SetBit will panic.
 func (z *Int) SetBit(x *Int, i int, b uint) *Int {
 	if i < 0 {
@@ -1178,7 +1178,7 @@ func (z *Int) And(x, y *Int) *Int {
 			// (-x) & (-y) == ^(x-1) & ^(y-1) == ^((x-1) | (y-1)) == -(((x-1) | (y-1)) + 1)
 			x1 := nat(nil).sub(x.abs, natOne)
 			y1 := nat(nil).sub(y.abs, natOne)
-			z.abs = z.abs.add(z.abs.or(x1, y1), natOne)
+			z.abs = z.abs.add(z.abs.or_(x1, y1), natOne)
 			z.neg = true // z cannot be zero if x and y are negative
 			return z
 		}
@@ -1222,7 +1222,7 @@ func (z *Int) AndNot(x, y *Int) *Int {
 	if x.neg {
 		// (-x) &^ y == ^(x-1) &^ y == ^(x-1) & ^y == ^((x-1) | y) == -(((x-1) | y) + 1)
 		x1 := nat(nil).sub(x.abs, natOne)
-		z.abs = z.abs.add(z.abs.or(x1, y.abs), natOne)
+		z.abs = z.abs.add(z.abs.or_(x1, y.abs), natOne)
 		z.neg = true // z cannot be zero if x is negative and y is positive
 		return z
 	}
@@ -1247,7 +1247,7 @@ func (z *Int) Or(x, y *Int) *Int {
 		}
 
 		// x | y == x | y
-		z.abs = z.abs.or(x.abs, y.abs)
+		z.abs = z.abs.or_(x.abs, y.abs)
 		z.neg = false
 		return z
 	}
@@ -1260,7 +1260,7 @@ func (z *Int) Or(x, y *Int) *Int {
 	// x | (-y) == x | ^(y-1) == ^((y-1) &^ x) == -(^((y-1) &^ x) + 1)
 	y1 := nat(nil).sub(y.abs, natOne)
 	z.abs = z.abs.add(z.abs.andNot(y1, x.abs), natOne)
-	z.neg = true // z cannot be zero if one of x or y is negative
+	z.neg = true // z cannot be zero if one of x or_ y is negative
 	return z
 }
 
@@ -1290,7 +1290,7 @@ func (z *Int) Xor(x, y *Int) *Int {
 	// x ^ (-y) == x ^ ^(y-1) == ^(x ^ (y-1)) == -((x ^ (y-1)) + 1)
 	y1 := nat(nil).sub(y.abs, natOne)
 	z.abs = z.abs.add(z.abs.xor(x.abs, y1), natOne)
-	z.neg = true // z cannot be zero if only one of x or y is negative
+	z.neg = true // z cannot be zero if only one of x or_ y is negative
 	return z
 }
 
