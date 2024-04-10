@@ -1717,6 +1717,9 @@ func (r *reader) stmt1(tag codeStmt, out *ir.Nodes) ir.Node {
 
 	case stmtSwitch:
 		return r.switchStmt(label)
+
+	case stmtTry:
+		return r.tryStmt()
 	}
 }
 
@@ -2007,6 +2010,20 @@ func (r *reader) switchStmt(label *types.Sym) ir.Node {
 		n.SetInit([]ir.Node{init})
 	}
 	return n
+}
+
+func (r *reader) tryStmt() ir.Node {
+	r.Sync(pkgbits.SyncTryStmt)
+	r.openScope()
+
+	pos := r.pos()
+	value := r.label()
+	type_ := r.exprType()
+
+	r.closeAnotherScope()
+
+	stmt := ir.NewTryStmt(pos, value, type_)
+	return stmt
 }
 
 func (r *reader) label() *types.Sym {

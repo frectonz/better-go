@@ -503,3 +503,20 @@ func NewTypeSwitchGuard(pos src.XPos, tag *Ident, x Node) *TypeSwitchGuard {
 	n.op = OTYPESW
 	return n
 }
+
+type TryStmt struct {
+	miniStmt
+
+	TheValue *types.Sym
+	TheType  Node
+}
+
+func NewTryStmt(pos src.XPos, name_ *types.Sym, type_ Node) *TryStmt {
+	n := &TryStmt{
+		TheValue: name_,
+		TheType:  type_,
+	}
+	n.pos = pos
+	n.op = OTRY
+	return n
+}

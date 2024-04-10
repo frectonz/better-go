@@ -61,27 +61,28 @@ func _() {
 	_ = x[SyncIfStmt-51]
 	_ = x[SyncForStmt-52]
 	_ = x[SyncSwitchStmt-53]
-	_ = x[SyncRangeStmt-54]
-	_ = x[SyncCaseClause-55]
-	_ = x[SyncCommClause-56]
-	_ = x[SyncSelectStmt-57]
-	_ = x[SyncDecls-58]
-	_ = x[SyncLabeledStmt-59]
-	_ = x[SyncUseObjLocal-60]
-	_ = x[SyncAddLocal-61]
-	_ = x[SyncLinkname-62]
-	_ = x[SyncStmt1-63]
-	_ = x[SyncStmtsEnd-64]
-	_ = x[SyncLabel-65]
-	_ = x[SyncOptLabel-66]
-	_ = x[SyncMultiExpr-67]
-	_ = x[SyncRType-68]
-	_ = x[SyncConvRTTI-69]
+	_ = x[SyncTryStmt-54]
+	_ = x[SyncRangeStmt-55]
+	_ = x[SyncCaseClause-56]
+	_ = x[SyncCommClause-57]
+	_ = x[SyncSelectStmt-58]
+	_ = x[SyncDecls-59]
+	_ = x[SyncLabeledStmt-60]
+	_ = x[SyncUseObjLocal-61]
+	_ = x[SyncAddLocal-62]
+	_ = x[SyncLinkname-63]
+	_ = x[SyncStmt1-64]
+	_ = x[SyncStmtsEnd-65]
+	_ = x[SyncLabel-66]
+	_ = x[SyncOptLabel-67]
+	_ = x[SyncMultiExpr-68]
+	_ = x[SyncRType-69]
+	_ = x[SyncConvRTTI-70]
 }
 
-const _SyncMarker_name = "EOFBoolInt64Uint64StringValueValRelocsRelocUseRelocPublicPosPosBaseObjectObject1PkgPkgDefMethodTypeTypeIdxTypeParamNamesSignatureParamsParamCodeObjSymLocalIdentSelectorPrivateFuncExtVarExtTypeExtPragmaExprListExprsExprExprTypeAssignOpFuncLitCompLitDeclFuncBodyOpenScopeCloseScopeCloseAnotherScopeDeclNamesDeclNameStmtsBlockStmtIfStmtForStmtSwitchStmtRangeStmtCaseClauseCommClauseSelectStmtDeclsLabeledStmtUseObjLocalAddLocalLinknameStmt1StmtsEndLabelOptLabelMultiExprRTypeConvRTTI"
+const _SyncMarker_name = "EOFBoolInt64Uint64StringValueValRelocsRelocUseRelocPublicPosPosBaseObjectObject1PkgPkgDefMethodTypeTypeIdxTypeParamNamesSignatureParamsParamCodeObjSymLocalIdentSelectorPrivateFuncExtVarExtTypeExtPragmaExprListExprsExprExprTypeAssignOpFuncLitCompLitDeclFuncBodyOpenScopeCloseScopeCloseAnotherScopeDeclNamesDeclNameStmtsBlockStmtIfStmtForStmtSwitchStmtTryStmtRangeStmtCaseClauseCommClauseSelectStmtDeclsLabeledStmtUseObjLocalAddLocalLinknameStmt1StmtsEndLabelOptLabelMultiExprRTypeConvRTTI"
 
-var _SyncMarker_index = [...]uint16{0, 3, 7, 12, 18, 24, 29, 32, 38, 43, 51, 57, 60, 67, 73, 80, 83, 89, 95, 99, 106, 120, 129, 135, 140, 147, 150, 160, 168, 175, 182, 188, 195, 201, 209, 214, 218, 226, 232, 234, 241, 248, 252, 260, 269, 279, 296, 305, 313, 318, 327, 333, 340, 350, 359, 369, 379, 389, 394, 405, 416, 424, 432, 437, 445, 450, 458, 467, 472, 480}
+var _SyncMarker_index = [...]uint16{0, 3, 7, 12, 18, 24, 29, 32, 38, 43, 51, 57, 60, 67, 73, 80, 83, 89, 95, 99, 106, 120, 129, 135, 140, 147, 150, 160, 168, 175, 182, 188, 195, 201, 209, 214, 218, 226, 232, 234, 241, 248, 252, 260, 269, 279, 296, 305, 313, 318, 327, 333, 340, 350, 357, 366, 376, 386, 396, 401, 412, 423, 431, 439, 444, 452, 457, 465, 474, 479, 487}
 
 func (i SyncMarker) String() string {
 	i -= 1

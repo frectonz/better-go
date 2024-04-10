@@ -1323,6 +1323,10 @@ func (w *writer) stmt1(stmt syntax.Stmt) {
 	case *syntax.SwitchStmt:
 		w.Code(stmtSwitch)
 		w.switchStmt(stmt)
+
+	case *syntax.TryStmt:
+		w.Code(stmtTry)
+		w.tryStmt(stmt)
 	}
 }
 
@@ -1687,6 +1691,17 @@ func (w *writer) switchStmt(stmt *syntax.SwitchStmt) {
 	}
 
 	w.closeScope(stmt.Rbrace)
+}
+
+func (w *writer) tryStmt(stmt *syntax.TryStmt) {
+	w.Sync(pkgbits.SyncTryStmt)
+	w.openScope(stmt.Pos())
+	w.pos(stmt)
+
+	w.label(stmt.Value)
+	w.exprType(nil, stmt.Type)
+
+	w.closeAnotherScope()
 }
 
 func (w *writer) label(label *syntax.Name) {

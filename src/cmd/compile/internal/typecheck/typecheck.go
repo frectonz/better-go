@@ -587,6 +587,9 @@ func typecheck1(n ir.Node, top int) ir.Node {
 	case ir.ODCLFUNC:
 		tcFunc(n.(*ir.Func))
 		return n
+
+	case ir.OTRY:
+		panic("at the disco")
 	}
 
 	// No return n here!
