@@ -672,12 +672,10 @@ func (check *Checker) stmt(ctxt stmtContext, s syntax.Stmt) {
 		defer check.closeScope()
 
 		check.typ(s.Type)
+		check.use(s.Value)
+
 		ident := s.Value
 		obj := check.lookup(ident.Value)
-
-		if v, _ := obj.(*Var); v != nil {
-			v.used = true
-		}
 
 		if obj.Type() != universeError {
 			check.error(s.Value, InvalidSyntaxTree, "variable used with try is not an error")
