@@ -1646,6 +1646,9 @@ func (n *TryStmt) doChildren(do func(Node) bool) bool {
 	if doNodes(n.init, do) {
 		return true
 	}
+	if n.TheValue != nil && do(n.TheValue) {
+		return true
+	}
 	if n.TheType != nil && do(n.TheType) {
 		return true
 	}
@@ -1653,12 +1656,18 @@ func (n *TryStmt) doChildren(do func(Node) bool) bool {
 }
 func (n *TryStmt) editChildren(edit func(Node) Node) {
 	editNodes(n.init, edit)
+	if n.TheValue != nil {
+		n.TheValue = edit(n.TheValue).(Node)
+	}
 	if n.TheType != nil {
 		n.TheType = edit(n.TheType).(Node)
 	}
 }
 func (n *TryStmt) editChildrenWithHidden(edit func(Node) Node) {
 	editNodes(n.init, edit)
+	if n.TheValue != nil {
+		n.TheValue = edit(n.TheValue).(Node)
+	}
 	if n.TheType != nil {
 		n.TheType = edit(n.TheType).(Node)
 	}

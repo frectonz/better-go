@@ -507,11 +507,11 @@ func NewTypeSwitchGuard(pos src.XPos, tag *Ident, x Node) *TypeSwitchGuard {
 type TryStmt struct {
 	miniStmt
 
-	TheValue *types.Sym
+	TheValue Node
 	TheType  Node
 }
 
-func NewTryStmt(pos src.XPos, name_ *types.Sym, type_ Node) *TryStmt {
+func NewTryStmt(pos src.XPos, name_, type_ Node) *TryStmt {
 	n := &TryStmt{
 		TheValue: name_,
 		TheType:  type_,
