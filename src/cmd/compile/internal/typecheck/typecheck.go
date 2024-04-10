@@ -589,7 +589,8 @@ func typecheck1(n ir.Node, top int) ir.Node {
 		return n
 
 	case ir.OTRY:
-		panic("at the disco")
+		tcTry(n.(*ir.TryStmt))
+		return n
 	}
 
 	// No return n here!

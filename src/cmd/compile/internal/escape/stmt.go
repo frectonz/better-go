@@ -192,6 +192,9 @@ func (e *escape) stmt(n ir.Node) {
 	case ir.OTAILCALL:
 		n := n.(*ir.TailCallStmt)
 		e.call(nil, n.Call)
+
+	case ir.OTRY:
+		panic("at the disco")
 	}
 }
 
