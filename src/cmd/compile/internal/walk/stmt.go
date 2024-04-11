@@ -7,6 +7,9 @@ package walk
 import (
 	"cmd/compile/internal/base"
 	"cmd/compile/internal/ir"
+	"cmd/compile/internal/typecheck"
+	"cmd/compile/internal/types"
+	"fmt"
 )
 
 // The result of walkStmt MUST be assigned back to n, e.g.
@@ -164,6 +167,10 @@ func walkStmt(n ir.Node) ir.Node {
 	case ir.ORANGE:
 		n := n.(*ir.RangeStmt)
 		return walkRange(n)
+
+	case ir.OTRY:
+		n := n.(*ir.TryStmt)
+		return walkTry(n)
 	}
 
 	// No return! Each case must return (or panic),
@@ -226,4 +233,29 @@ func walkIf(n *ir.IfStmt) ir.Node {
 	walkStmtList(n.Body)
 	walkStmtList(n.Else)
 	return n
+}
+
+func walkTry(n *ir.TryStmt) ir.Node {
+	var init ir.Nodes
+
+	aNil := typecheck.NodNil()
+	aNil.SetType(n.TheValue.Type())
+	cond := ir.NewBinaryExpr(n.Pos(), ir.ONE, walkExpr(n.TheValue, &init), walkExpr(typecheck.Expr(aNil), &init))
+
+	fmt.Println("aNil", aNil)
+	fmt.Println("TheValue", n.TheValue)
+	fmt.Println()
+
+	fmt.Println("aNil.Type()", aNil.Type())
+	fmt.Println("TheValue.Type()", n.TheValue.Type())
+	fmt.Println()
+
+	fmt.Println("cond", cond)
+
+	zero := ir.NewNameAt(n.Pos(), &types.Sym{Name: "zero"}, n.TheType.Type())
+	zeroVar := ir.NewDecl(n.Pos(), ir.ODCL, zero)
+	return_ := ir.NewReturnStmt(n.Pos(), []ir.Node{zero, n.TheValue})
+
+	ifStmt := ir.NewIfStmt(n.Pos(), typecheck.Expr(walkExpr(cond, &init)), []ir.Node{zeroVar, return_}, nil)
+	return walkIf(ifStmt)
 }

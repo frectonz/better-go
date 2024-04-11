@@ -194,7 +194,8 @@ func (e *escape) stmt(n ir.Node) {
 		e.call(nil, n.Call)
 
 	case ir.OTRY:
-		panic("at the disco")
+		n := n.(*ir.TryStmt)
+		e.assignHeap(n.TheValue, "err value could potentially be returned", n)
 	}
 }
 

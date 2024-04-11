@@ -1084,6 +1084,10 @@ func (o *orderState) stmt(n ir.Node) {
 
 		o.out = append(o.out, n)
 		o.popTemp(t)
+
+	case ir.OTRY:
+		n := n.(*ir.TryStmt)
+		o.out = append(o.out, n)
 	}
 
 	base.Pos = lno
