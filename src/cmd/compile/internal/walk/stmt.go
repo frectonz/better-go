@@ -236,26 +236,20 @@ func walkIf(n *ir.IfStmt) ir.Node {
 }
 
 func walkTry(n *ir.TryStmt) ir.Node {
-	var init ir.Nodes
-
 	aNil := typecheck.NodNil()
 	aNil.SetType(n.TheValue.Type())
-	cond := ir.NewBinaryExpr(n.Pos(), ir.ONE, walkExpr(n.TheValue, &init), walkExpr(typecheck.Expr(aNil), &init))
-
-	fmt.Println("aNil", aNil)
-	fmt.Println("TheValue", n.TheValue)
-	fmt.Println()
-
-	fmt.Println("aNil.Type()", aNil.Type())
-	fmt.Println("TheValue.Type()", n.TheValue.Type())
-	fmt.Println()
-
-	fmt.Println("cond", cond)
+	cond := ir.NewBinaryExpr(n.Pos(), ir.ONE, n.TheValue, aNil)
+	condStmt := typecheck.Conv(cond, types.Types[types.TBOOL])
 
 	zero := ir.NewNameAt(n.Pos(), &types.Sym{Name: "zero"}, n.TheType.Type())
+	fmt.Println(zero)
 	zeroVar := ir.NewDecl(n.Pos(), ir.ODCL, zero)
+	fmt.Println(zeroVar)
 	return_ := ir.NewReturnStmt(n.Pos(), []ir.Node{zero, n.TheValue})
+	fmt.Println(return_)
 
-	ifStmt := ir.NewIfStmt(n.Pos(), typecheck.Expr(walkExpr(cond, &init)), []ir.Node{zeroVar, return_}, nil)
+	ifStmt := ir.NewIfStmt(n.Pos(), condStmt, []ir.Node{zeroVar, return_}, nil)
+	fmt.Println(ifStmt)
+
 	return walkIf(ifStmt)
 }
