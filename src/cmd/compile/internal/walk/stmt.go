@@ -9,7 +9,6 @@ import (
 	"cmd/compile/internal/ir"
 	"cmd/compile/internal/typecheck"
 	"cmd/compile/internal/types"
-	"fmt"
 )
 
 // The result of walkStmt MUST be assigned back to n, e.g.
@@ -238,18 +237,17 @@ func walkIf(n *ir.IfStmt) ir.Node {
 func walkTry(n *ir.TryStmt) ir.Node {
 	aNil := typecheck.NodNil()
 	aNil.SetType(n.TheValue.Type())
+
 	cond := ir.NewBinaryExpr(n.Pos(), ir.ONE, n.TheValue, aNil)
 	condStmt := typecheck.Conv(cond, types.Types[types.TBOOL])
 
-	zero := ir.NewNameAt(n.Pos(), &types.Sym{Name: "zero"}, n.TheType.Type())
-	fmt.Println(zero)
-	zeroVar := ir.NewDecl(n.Pos(), ir.ODCL, zero)
-	fmt.Println(zeroVar)
-	return_ := ir.NewReturnStmt(n.Pos(), []ir.Node{zero, n.TheValue})
-	fmt.Println(return_)
+	newNil := typecheck.NodNil()
+	newNil.SetType(n.TheType.Type())
 
-	ifStmt := ir.NewIfStmt(n.Pos(), condStmt, []ir.Node{zeroVar, return_}, nil)
-	fmt.Println(ifStmt)
+	return_ := ir.NewReturnStmt(n.Pos(), []ir.Node{newNil, n.TheValue})
+	body := []ir.Node{return_}
+	walkStmtList(body)
 
-	return walkIf(ifStmt)
+	ifStmt := ir.NewIfStmt(n.Pos(), condStmt, body, nil)
+	return ifStmt
 }
