@@ -23,3 +23,11 @@ The try statement expects two values.
 1. the error variable
 2. the type of the return value (this is needed because go has this convention of returning the zero value of a type incase of an error)
 
+
+# How to run it
+
+```
+nix develop
+cd src
+./make.bash
+```
