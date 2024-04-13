@@ -506,23 +506,26 @@ func NewTypeSwitchGuard(pos src.XPos, tag *Ident, x Node) *TypeSwitchGuard {
 
 func NewTryStmt(pos src.XPos, name_, type_ Node) *IfStmt {
 	aNil := NewNilExpr(pos, types.Types[types.TNIL])
-	//aNil.SetType(n.TheValue.Type())
 	cond := NewBinaryExpr(pos, ONE, name_, aNil)
 
 	len_ := NewInt(pos, 1)
-	//len_.SetType(types.Types[types.TINT])
-	//make_ := NewMakeExpr(n.Pos(), OMAKESLICE, len_, nil)
-
 	make_ := NewCallExpr(pos, OMAKE, nil, []Node{type_, len_})
-	//n.RType = r.rtype(pos)
-
-	//make_.SetType(n.TheType.Type())
 	empty := NewIndexExpr(pos, make_, NewInt(pos, 0))
 
 	return_ := NewReturnStmt(pos, []Node{empty, name_})
 	body := []Node{return_}
 
 	ifStmt := NewIfStmt(pos, cond, body, nil)
+	return ifStmt
+}
 
+func NewUnwrapStmt(pos src.XPos, name_ Node) *IfStmt {
+	aNil := NewNilExpr(pos, types.Types[types.TNIL])
+	cond := NewBinaryExpr(pos, ONE, name_, aNil)
+
+	panic_ := NewUnaryExpr(pos, OPANIC, name_)
+	body := []Node{panic_}
+
+	ifStmt := NewIfStmt(pos, cond, body, nil)
 	return ifStmt
 }

@@ -437,6 +437,11 @@ type (
 		Value Expr
 		stmt
 	}
+
+	UnwrapStmt struct {
+		Value Expr
+		stmt
+	}
 )
 
 type (

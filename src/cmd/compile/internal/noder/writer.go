@@ -1327,6 +1327,10 @@ func (w *writer) stmt1(stmt syntax.Stmt) {
 	case *syntax.TryStmt:
 		w.Code(stmtTry)
 		w.tryStmt(stmt)
+
+	case *syntax.UnwrapStmt:
+		w.Code(stmtUnwrap)
+		w.unwrapStmt(stmt)
 	}
 }
 
@@ -1701,6 +1705,14 @@ func (w *writer) tryStmt(stmt *syntax.TryStmt) {
 	w.expr(stmt.Value)
 	w.exprType(nil, stmt.Type)
 
+	w.closeAnotherScope()
+}
+
+func (w *writer) unwrapStmt(stmt *syntax.UnwrapStmt) {
+	w.Sync(pkgbits.SyncUnwrapStmt)
+	w.openScope(stmt.Pos())
+	w.pos(stmt)
+	w.expr(stmt.Value)
 	w.closeAnotherScope()
 }
 

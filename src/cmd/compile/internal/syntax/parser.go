@@ -2559,6 +2559,19 @@ func (p *parser) tryStmt() *TryStmt {
 	return s
 }
 
+func (p *parser) unwrapStmt() *UnwrapStmt {
+	if trace {
+		defer p.trace("unwrapStmt")()
+	}
+
+	s := new(UnwrapStmt)
+	s.pos = p.pos()
+	p.want(_Unwrap)
+	s.Value = p.expr()
+
+	return s
+}
+
 // stmtOrNil parses a statement if one is present, or else returns nil.
 //
 //	Statement =
@@ -2624,6 +2637,9 @@ func (p *parser) stmtOrNil() Stmt {
 
 	case _Try:
 		return p.tryStmt()
+
+	case _Unwrap:
+		return p.unwrapStmt()
 
 	case _Fallthrough:
 		s := new(BranchStmt)

@@ -739,7 +739,7 @@ func (s *state) evalCall(dot, fun reflect.Value, isBuiltin bool, node parse.Node
 		s.errorf("can't call method/function %q with %d results", name, typ.NumOut())
 	}
 
-	unwrap := func(v reflect.Value) reflect.Value {
+	unwrap_ := func(v reflect.Value) reflect.Value {
 		if v.Type() == reflectValueType {
 			v = v.Interface().(reflect.Value)
 		}
@@ -764,8 +764,8 @@ func (s *state) evalCall(dot, fun reflect.Value, isBuiltin bool, node parse.Node
 			// argument, so we are going to return this one.
 			// We don't have to evaluate final, but we do
 			// have to check its type. Then, since we are
-			// going to return it, we have to unwrap it.
-			v = unwrap(s.validateType(final, argType))
+			// going to return it, we have to unwrap_ it.
+			v = unwrap_(s.validateType(final, argType))
 		}
 		return v
 	}
@@ -807,7 +807,7 @@ func (s *state) evalCall(dot, fun reflect.Value, isBuiltin bool, node parse.Node
 		s.at(node)
 		s.errorf("error calling %s: %w", name, err)
 	}
-	return unwrap(v)
+	return unwrap_(v)
 }
 
 // canBeNil reports whether an untyped nil can be assigned to the type. See reflect.Zero.
