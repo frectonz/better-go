@@ -709,11 +709,6 @@ func tcSwitchType(n *ir.SwitchStmt) {
 	}
 }
 
-func tcTry(n *ir.TryStmt) {
-	n.TheValue = Expr(n.TheValue)
-	n.TheType = Expr(n.TheType)
-}
-
 type typeSet struct {
 	m map[string]src.XPos
 }

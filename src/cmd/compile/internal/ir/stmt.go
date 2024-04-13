@@ -9,7 +9,6 @@ import (
 	"cmd/compile/internal/types"
 	"cmd/internal/obj"
 	"cmd/internal/src"
-	"fmt"
 	"go/constant"
 )
 
@@ -505,39 +504,25 @@ func NewTypeSwitchGuard(pos src.XPos, tag *Ident, x Node) *TypeSwitchGuard {
 	return n
 }
 
-type TryStmt struct {
-	miniStmt
-
-	TheValue Node
-	TheType  Node
-}
-
 func NewTryStmt(pos src.XPos, name_, type_ Node) *IfStmt {
-	n := &TryStmt{
-		TheValue: name_,
-		TheType:  type_,
-	}
-	n.pos = pos
-	n.op = OTRY
-
-	aNil := NewNilExpr(base.Pos, types.Types[types.TNIL])
+	aNil := NewNilExpr(pos, types.Types[types.TNIL])
 	//aNil.SetType(n.TheValue.Type())
-	cond := NewBinaryExpr(n.Pos(), ONE, n.TheValue, aNil)
+	cond := NewBinaryExpr(pos, ONE, name_, aNil)
 
-	len_ := NewInt(n.Pos(), 1)
+	len_ := NewInt(pos, 1)
 	//len_.SetType(types.Types[types.TINT])
 	//make_ := NewMakeExpr(n.Pos(), OMAKESLICE, len_, nil)
 
-	make_ := NewCallExpr(n.Pos(), OMAKE, nil, []Node{n.TheType, len_})
+	make_ := NewCallExpr(pos, OMAKE, nil, []Node{type_, len_})
 	//n.RType = r.rtype(pos)
 
 	//make_.SetType(n.TheType.Type())
-	empty := NewIndexExpr(n.Pos(), make_, NewInt(n.Pos(), 0))
+	empty := NewIndexExpr(pos, make_, NewInt(pos, 0))
 
-	return_ := NewReturnStmt(n.Pos(), []Node{empty, n.TheValue})
+	return_ := NewReturnStmt(pos, []Node{empty, name_})
 	body := []Node{return_}
 
-	ifStmt := NewIfStmt(n.Pos(), cond, body, nil)
+	ifStmt := NewIfStmt(pos, cond, body, nil)
 
 	return ifStmt
 }

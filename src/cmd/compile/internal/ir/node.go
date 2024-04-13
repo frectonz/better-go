@@ -273,7 +273,6 @@ const (
 	ORETURN   // return Results
 	OSELECT   // select { Cases }
 	OSWITCH   // switch Init; Expr { Cases }
-	OTRY      // try Error or Type
 	// OTYPESW:  X := Y.(type) (appears as .Tag of OSWITCH)
 	//   X is nil if there is no type-switch variable
 	OTYPESW

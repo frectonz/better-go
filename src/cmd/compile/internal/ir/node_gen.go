@@ -1636,43 +1636,6 @@ func (n *TailCallStmt) editChildrenWithHidden(edit func(Node) Node) {
 	}
 }
 
-func (n *TryStmt) Format(s fmt.State, verb rune) { fmtNode(n, s, verb) }
-func (n *TryStmt) copy() Node {
-	c := *n
-	c.init = copyNodes(c.init)
-	return &c
-}
-func (n *TryStmt) doChildren(do func(Node) bool) bool {
-	if doNodes(n.init, do) {
-		return true
-	}
-	if n.TheValue != nil && do(n.TheValue) {
-		return true
-	}
-	if n.TheType != nil && do(n.TheType) {
-		return true
-	}
-	return false
-}
-func (n *TryStmt) editChildren(edit func(Node) Node) {
-	editNodes(n.init, edit)
-	if n.TheValue != nil {
-		n.TheValue = edit(n.TheValue).(Node)
-	}
-	if n.TheType != nil {
-		n.TheType = edit(n.TheType).(Node)
-	}
-}
-func (n *TryStmt) editChildrenWithHidden(edit func(Node) Node) {
-	editNodes(n.init, edit)
-	if n.TheValue != nil {
-		n.TheValue = edit(n.TheValue).(Node)
-	}
-	if n.TheType != nil {
-		n.TheType = edit(n.TheType).(Node)
-	}
-}
-
 func (n *TypeAssertExpr) Format(s fmt.State, verb rune) { fmtNode(n, s, verb) }
 func (n *TypeAssertExpr) copy() Node {
 	c := *n

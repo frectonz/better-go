@@ -7,8 +7,6 @@ package walk
 import (
 	"cmd/compile/internal/base"
 	"cmd/compile/internal/ir"
-	"cmd/compile/internal/typecheck"
-	"cmd/compile/internal/types"
 )
 
 // The result of walkStmt MUST be assigned back to n, e.g.
@@ -166,10 +164,6 @@ func walkStmt(n ir.Node) ir.Node {
 	case ir.ORANGE:
 		n := n.(*ir.RangeStmt)
 		return walkRange(n)
-
-	case ir.OTRY:
-		n := n.(*ir.TryStmt)
-		return walkTry(n)
 	}
 
 	// No return! Each case must return (or panic),
@@ -232,22 +226,4 @@ func walkIf(n *ir.IfStmt) ir.Node {
 	walkStmtList(n.Body)
 	walkStmtList(n.Else)
 	return n
-}
-
-func walkTry(n *ir.TryStmt) ir.Node {
-	aNil := typecheck.NodNil()
-	aNil.SetType(n.TheValue.Type())
-
-	cond := ir.NewBinaryExpr(n.Pos(), ir.ONE, n.TheValue, aNil)
-	condStmt := typecheck.Conv(cond, types.Types[types.TBOOL])
-
-	newNil := typecheck.NodNil()
-	newNil.SetType(n.TheType.Type())
-
-	return_ := ir.NewReturnStmt(n.Pos(), []ir.Node{newNil, n.TheValue})
-	body := []ir.Node{return_}
-	walkStmtList(body)
-
-	ifStmt := ir.NewIfStmt(n.Pos(), condStmt, body, nil)
-	return ifStmt
 }
