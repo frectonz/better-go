@@ -9,6 +9,7 @@ import (
 	"cmd/compile/internal/types"
 	"cmd/internal/obj"
 	"cmd/internal/src"
+	"fmt"
 	"go/constant"
 )
 
@@ -511,12 +512,32 @@ type TryStmt struct {
 	TheType  Node
 }
 
-func NewTryStmt(pos src.XPos, name_, type_ Node) *TryStmt {
+func NewTryStmt(pos src.XPos, name_, type_ Node) *IfStmt {
 	n := &TryStmt{
 		TheValue: name_,
 		TheType:  type_,
 	}
 	n.pos = pos
 	n.op = OTRY
-	return n
+
+	aNil := NewNilExpr(base.Pos, types.Types[types.TNIL])
+	//aNil.SetType(n.TheValue.Type())
+	cond := NewBinaryExpr(n.Pos(), ONE, n.TheValue, aNil)
+
+	len_ := NewInt(n.Pos(), 1)
+	//len_.SetType(types.Types[types.TINT])
+	//make_ := NewMakeExpr(n.Pos(), OMAKESLICE, len_, nil)
+
+	make_ := NewCallExpr(n.Pos(), OMAKE, nil, []Node{n.TheType, len_})
+	//n.RType = r.rtype(pos)
+
+	//make_.SetType(n.TheType.Type())
+	empty := NewIndexExpr(n.Pos(), make_, NewInt(n.Pos(), 0))
+
+	return_ := NewReturnStmt(n.Pos(), []Node{empty, n.TheValue})
+	body := []Node{return_}
+
+	ifStmt := NewIfStmt(n.Pos(), cond, body, nil)
+
+	return ifStmt
 }

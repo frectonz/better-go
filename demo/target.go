@@ -17,8 +17,7 @@ func main() {
 func readFile(filename string) (string, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
-		var content string
-		return content, err
+		return make([]string, 1)[0], err
 	}
 	return string(content), nil
 }
