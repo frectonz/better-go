@@ -1698,8 +1698,7 @@ func (w *writer) tryStmt(stmt *syntax.TryStmt) {
 	w.openScope(stmt.Pos())
 	w.pos(stmt)
 
-	obj, _ := w.p.info.Uses[stmt.Value]
-	w.obj(obj, nil)
+	w.expr(stmt.Value)
 	w.exprType(nil, stmt.Type)
 
 	w.closeAnotherScope()

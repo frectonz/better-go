@@ -434,7 +434,7 @@ type (
 
 	TryStmt struct {
 		Type  Expr
-		Value *Name
+		Value Expr
 		stmt
 	}
 )

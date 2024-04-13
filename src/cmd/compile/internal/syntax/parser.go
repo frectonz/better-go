@@ -2550,7 +2550,7 @@ func (p *parser) tryStmt() *TryStmt {
 	s.pos = p.pos()
 
 	p.want(_Try)
-	s.Value = p.name()
+	s.Value = p.expr()
 	p.want(_Or)
 	sliceType := new(SliceType)
 	sliceType.Elem = p.type_()

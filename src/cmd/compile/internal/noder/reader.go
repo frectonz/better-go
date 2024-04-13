@@ -2017,7 +2017,7 @@ func (r *reader) tryStmt() ir.Node {
 	r.openScope()
 
 	pos := r.pos()
-	value := r.obj()
+	value := r.expr()
 	type_ := r.exprType()
 
 	r.closeAnotherScope()

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	fileContent, err := readFile("/etc/locale.conf")
+	fileContent, err := readFile("sample.txt")
 	if err != nil {
 		fmt.Printf("Error reading file: %v\n", err)
 		return
