@@ -20,7 +20,7 @@
             owner = "frectonz";
             repo = "better-go";
             rev = "second-try";
-            hash = "sha256-V/2gW9Ig7CkaNz/H7Vt5pUHH8BBPSea5cUkXbKfzhu8=";
+            hash = "sha256-PnkYOvr8+nEv15nv6W+F1wdwzXdtgXuJgyZQTz48duU=";
           };
         });
 
