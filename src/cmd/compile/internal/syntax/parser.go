@@ -2559,6 +2559,20 @@ func (p *parser) tryStmt() *TryStmt {
 	return s
 }
 
+func (p *parser) babaStmt() *BabaStmt {
+	if trace {
+		defer p.trace("babaStmt")()
+	}
+
+	s := new(BabaStmt)
+	s.pos = p.pos()
+
+	p.want(_Bababooey)
+	s.Value = p.expr()
+
+	return s
+}
+
 func (p *parser) unwrapStmt() *UnwrapStmt {
 	if trace {
 		defer p.trace("unwrapStmt")()
@@ -2637,6 +2651,9 @@ func (p *parser) stmtOrNil() Stmt {
 
 	case _Try:
 		return p.tryStmt()
+
+	case _Bababooey:
+		return p.babaStmt()
 
 	case _Unwrap:
 		return p.unwrapStmt()

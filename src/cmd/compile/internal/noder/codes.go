@@ -29,6 +29,7 @@ const (
 	stmtSwitch
 	stmtSelect
 	stmtTry
+	stmtBaba
 	stmtUnwrap
 )
 

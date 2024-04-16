@@ -674,6 +674,12 @@ func (check *Checker) stmt(ctxt stmtContext, s syntax.Stmt) {
 		check.typ(s.Type)
 		check.use(s.Value)
 
+	case *syntax.BabaStmt:
+		check.openScope(s, "bababooey")
+		defer check.closeScope()
+
+		check.use(s.Value)
+
 	case *syntax.UnwrapStmt:
 		check.openScope(s, "unwrap")
 		defer check.closeScope()

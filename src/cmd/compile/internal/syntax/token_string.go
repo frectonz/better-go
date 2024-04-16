@@ -45,24 +45,25 @@ func _() {
 	_ = x[_If-35]
 	_ = x[_Try-36]
 	_ = x[_Unwrap-37]
-	_ = x[_Or-38]
-	_ = x[_Import-39]
-	_ = x[_Interface-40]
-	_ = x[_Map-41]
-	_ = x[_Package-42]
-	_ = x[_Range-43]
-	_ = x[_Return-44]
-	_ = x[_Select-45]
-	_ = x[_Struct-46]
-	_ = x[_Switch-47]
-	_ = x[_Type-48]
-	_ = x[_Var-49]
-	_ = x[tokenCount-50]
+	_ = x[_Bababooey-38]
+	_ = x[_Or-39]
+	_ = x[_Import-40]
+	_ = x[_Interface-41]
+	_ = x[_Map-42]
+	_ = x[_Package-43]
+	_ = x[_Range-44]
+	_ = x[_Return-45]
+	_ = x[_Select-46]
+	_ = x[_Struct-47]
+	_ = x[_Switch-48]
+	_ = x[_Type-49]
+	_ = x[_Var-50]
+	_ = x[tokenCount-51]
 }
 
-const _token_name = "EOFnameliteralopop=opop=:=<-*([{)]},;:....breakcasechanconstcontinuedefaultdeferelsefallthroughforfuncgogotoiftryunwraporimportinterfacemappackagerangereturnselectstructswitchtypevar"
+const _token_name = "EOFnameliteralopop=opop=:=<-*([{)]},;:....breakcasechanconstcontinuedefaultdeferelsefallthroughforfuncgogotoiftryunwrapbababooeyorimportinterfacemappackagerangereturnselectstructswitchtypevar"
 
-var _token_index = [...]uint8{0, 3, 7, 14, 16, 19, 23, 24, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 42, 47, 51, 55, 60, 68, 75, 80, 84, 95, 98, 102, 104, 108, 110, 113, 119, 121, 127, 136, 139, 146, 151, 157, 163, 169, 175, 179, 182, 182}
+var _token_index = [...]uint8{0, 3, 7, 14, 16, 19, 23, 24, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 42, 47, 51, 55, 60, 68, 75, 80, 84, 95, 98, 102, 104, 108, 110, 113, 119, 128, 130, 136, 145, 148, 155, 160, 166, 172, 178, 184, 188, 191, 191}
 
 func (i token) String() string {
 	i -= 1

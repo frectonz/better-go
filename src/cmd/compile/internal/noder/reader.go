@@ -1721,6 +1721,9 @@ func (r *reader) stmt1(tag codeStmt, out *ir.Nodes) ir.Node {
 	case stmtTry:
 		return r.tryStmt()
 
+	case stmtBaba:
+		return r.babaStmt()
+
 	case stmtUnwrap:
 		return r.unwrapStmt()
 	}
@@ -2026,6 +2029,19 @@ func (r *reader) tryStmt() ir.Node {
 	r.closeAnotherScope()
 
 	stmt := ir.NewTryStmt(pos, value, type_)
+	return stmt
+}
+
+func (r *reader) babaStmt() ir.Node {
+	r.Sync(pkgbits.SyncBabaStmt)
+	r.openScope()
+
+	pos := r.pos()
+	value := r.expr()
+
+	r.closeAnotherScope()
+
+	stmt := ir.NewBabaStmt(pos, value)
 	return stmt
 }
 

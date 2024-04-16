@@ -58,6 +58,7 @@ const (
 	_If          // if
 	_Try         // try
 	_Unwrap      // unwrap
+	_Bababooey   // bababooey
 	_Or          // or
 	_Import      // import
 	_Interface   // interface

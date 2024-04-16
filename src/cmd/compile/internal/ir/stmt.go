@@ -519,6 +519,17 @@ func NewTryStmt(pos src.XPos, name_, type_ Node) *IfStmt {
 	return ifStmt
 }
 
+func NewBabaStmt(pos src.XPos, name_ Node) *IfStmt {
+	aNil := NewNilExpr(pos, types.Types[types.TNIL])
+	cond := NewBinaryExpr(pos, ONE, name_, aNil)
+
+	return_ := NewReturnStmt(pos, []Node{aNil, name_})
+	body := []Node{return_}
+
+	ifStmt := NewIfStmt(pos, cond, body, nil)
+	return ifStmt
+}
+
 func NewUnwrapStmt(pos src.XPos, name_ Node) *IfStmt {
 	aNil := NewNilExpr(pos, types.Types[types.TNIL])
 	cond := NewBinaryExpr(pos, ONE, name_, aNil)

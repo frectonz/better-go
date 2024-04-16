@@ -316,6 +316,11 @@ func (w walker) node(n Node) {
 			w.node(n.Value)
 		}
 
+	case *BabaStmt:
+		if n.Value != nil {
+			w.node(n.Value)
+		}
+
 	case *UnwrapStmt:
 		if n.Value != nil {
 			w.node(n.Value)

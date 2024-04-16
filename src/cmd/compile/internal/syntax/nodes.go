@@ -438,6 +438,11 @@ type (
 		stmt
 	}
 
+	BabaStmt struct {
+		Value Expr
+		stmt
+	}
+
 	UnwrapStmt struct {
 		Value Expr
 		stmt
