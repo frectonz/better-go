@@ -46,6 +46,26 @@ if err != nil {
 
 The unwrap statement expects one value, the error variable.
 
+## `bababooey`
+
+just like `try` but this doesn't need a type
+
+```golang
+content, err := ioutil.ReadFile(filename)
+bababooey err
+```
+
+bababooey desugared
+
+```golang
+...
+if err != nil {
+    return nil, err
+}
+```
+
+The bababooey statement expects one value, the error variable.
+
 # How to run it
 
 ```
