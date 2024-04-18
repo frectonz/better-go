@@ -295,6 +295,11 @@ redo:
 		}
 		if s.ch == '<' {
 			s.nextch()
+			if s.ch == '<' {
+				s.nextch()
+				s.tok = _Append
+				break
+			}
 			s.op, s.prec = Shl, precMul
 			goto assignop
 		}
@@ -347,6 +352,10 @@ redo:
 		s.nextch()
 		s.op, s.prec = Tilde, 0
 		s.tok = _Operator
+
+	case '@':
+		s.nextch()
+		s.tok = _At
 
 	default:
 		s.errorf("invalid character %#U", s.ch)

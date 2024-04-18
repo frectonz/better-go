@@ -27,6 +27,8 @@ const (
 	_Define   // :=
 	_Arrow    // <-
 	_Star     // *
+	_Append   // <<<
+	_At       // @
 
 	// delimiters
 	_Lparen    // (

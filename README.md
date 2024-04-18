@@ -66,6 +66,22 @@ if err != nil {
 
 The bababooey statement expects one value, the error variable.
 
+## `<<<`
+
+sugar for `append`
+
+```golang
+numbers := []int{1, 2, 3}
+numbers = append(numbers, 4)
+```
+
+append desugared
+
+```golang
+numbers := []uint{1, 2, 3}
+@numbers <<< 4
+```
+
 # How to run it
 
 ```

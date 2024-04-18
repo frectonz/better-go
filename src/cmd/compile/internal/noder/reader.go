@@ -1726,6 +1726,9 @@ func (r *reader) stmt1(tag codeStmt, out *ir.Nodes) ir.Node {
 
 	case stmtUnwrap:
 		return r.unwrapStmt()
+
+	case stmtAppend:
+		return r.appendStmt()
 	}
 }
 
@@ -2055,6 +2058,20 @@ func (r *reader) unwrapStmt() ir.Node {
 	r.closeAnotherScope()
 
 	stmt := ir.NewUnwrapStmt(pos, value)
+	return stmt
+}
+
+func (r *reader) appendStmt() ir.Node {
+	r.Sync(pkgbits.SyncAppendStmt)
+	r.openScope()
+
+	pos := r.pos()
+	list := r.expr()
+	value := r.expr()
+
+	r.closeAnotherScope()
+
+	stmt := ir.NewAppendStmt(pos, list, value)
 	return stmt
 }
 

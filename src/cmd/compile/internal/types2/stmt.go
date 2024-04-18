@@ -686,6 +686,13 @@ func (check *Checker) stmt(ctxt stmtContext, s syntax.Stmt) {
 
 		check.use(s.Value)
 
+	case *syntax.AppendStmt:
+		check.openScope(s, "append")
+		defer check.closeScope()
+
+		check.use(s.List)
+		check.use(s.Value)
+
 	default:
 		check.error(s, InvalidSyntaxTree, "invalid statement")
 	}

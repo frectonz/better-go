@@ -31,6 +31,7 @@ const (
 	stmtTry
 	stmtBaba
 	stmtUnwrap
+	stmtAppend
 )
 
 // A codeExpr distinguishes among expression encodings.

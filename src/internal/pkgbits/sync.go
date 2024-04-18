@@ -119,6 +119,7 @@ const (
 	SyncTryStmt
 	SyncBabaStmt
 	SyncUnwrapStmt
+	SyncAppendStmt
 	SyncRangeStmt
 	SyncCaseClause
 	SyncCommClause

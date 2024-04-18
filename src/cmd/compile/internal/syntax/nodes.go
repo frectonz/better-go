@@ -447,6 +447,12 @@ type (
 		Value Expr
 		stmt
 	}
+
+	AppendStmt struct {
+		List  Expr
+		Value Expr
+		stmt
+	}
 )
 
 type (

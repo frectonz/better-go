@@ -540,3 +540,9 @@ func NewUnwrapStmt(pos src.XPos, name_ Node) *IfStmt {
 	ifStmt := NewIfStmt(pos, cond, body, nil)
 	return ifStmt
 }
+
+func NewAppendStmt(pos src.XPos, list, value Node) *AssignStmt {
+	append_ := NewCallExpr(pos, OAPPEND, nil, []Node{list, value})
+	assignStmt := NewAssignStmt(pos, list, append_)
+	return assignStmt
+}

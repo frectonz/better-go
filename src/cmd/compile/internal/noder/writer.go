@@ -1335,6 +1335,10 @@ func (w *writer) stmt1(stmt syntax.Stmt) {
 	case *syntax.UnwrapStmt:
 		w.Code(stmtUnwrap)
 		w.unwrapStmt(stmt)
+
+	case *syntax.AppendStmt:
+		w.Code(stmtAppend)
+		w.appendStmt(stmt)
 	}
 }
 
@@ -1727,6 +1731,19 @@ func (w *writer) unwrapStmt(stmt *syntax.UnwrapStmt) {
 	w.openScope(stmt.Pos())
 	w.pos(stmt)
 	w.expr(stmt.Value)
+	w.closeAnotherScope()
+}
+
+func (w *writer) appendStmt(stmt *syntax.AppendStmt) {
+	w.Sync(pkgbits.SyncAppendStmt)
+	w.openScope(stmt.Pos())
+	w.pos(stmt)
+
+	typ := sliceElem(w.p.typeOf(stmt.List))
+
+	w.expr(stmt.List)
+	w.implicitConvExpr(typ, stmt.Value)
+
 	w.closeAnotherScope()
 }
 

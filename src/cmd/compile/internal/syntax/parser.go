@@ -2586,6 +2586,21 @@ func (p *parser) unwrapStmt() *UnwrapStmt {
 	return s
 }
 
+func (p *parser) appendStmt() *AppendStmt {
+	if trace {
+		defer p.trace("appendStmt")()
+	}
+
+	s := new(AppendStmt)
+	s.pos = p.pos()
+	p.want(_At)
+	s.List = p.expr()
+	p.want(_Append)
+	s.Value = p.expr()
+
+	return s
+}
+
 // stmtOrNil parses a statement if one is present, or else returns nil.
 //
 //	Statement =
@@ -2657,6 +2672,9 @@ func (p *parser) stmtOrNil() Stmt {
 
 	case _Unwrap:
 		return p.unwrapStmt()
+
+	case _At:
+		return p.appendStmt()
 
 	case _Fallthrough:
 		s := new(BranchStmt)
